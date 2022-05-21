@@ -70,6 +70,8 @@ import BaseButton from "@/common/BaseButton.vue";
 
 import { mapGetters } from "vuex";
 
+import { reviewApi } from "@/api/reviews";
+
 export default {
   components: {
     BaseCheckBoxGroup,
@@ -171,11 +173,10 @@ export default {
   methods: {
     async onSubmit() {
       try {
-        const resp = await this.$api.review.get({ baseId: this.agency.id, subIds: [this.user.id] });
+        const resp = await reviewApi.get({ baseId: this.agency.id, subIds: [this.user.id] });
         if (resp && resp.status === 204) {
           const current = new Date();
-          // TODO: Depending on kakao profile, needed to decouple
-          await this.$api.review.post({
+          await reviewApi.post({
             baseId: this.agency.id,
             data: {
               userId: this.user.id,

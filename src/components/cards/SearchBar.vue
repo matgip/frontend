@@ -115,7 +115,7 @@ export default {
 
   methods: {
     clear() {
-      this.$store.commit("CLEAR_ESTATE");
+      this.$store.commit("CLEAR_AGENCY");
     },
   },
 };

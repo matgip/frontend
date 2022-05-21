@@ -1,35 +1,34 @@
 import agencyApi from "@/api/agency";
 
 const GET_AGENCY = "GET_AGENCY";
-const CLEAR_ESTATE = "CLEAR_ESTATE";
-const UPDATE_ESTATE = "UPDATE_ESTATE";
+const CLEAR_AGENCY = "CLEAR_AGENCY";
+const UPDATE_AGENCY = "UPDATE_AGENCY";
 
 const IS_EMPTY_REPLY = (resp) => {
   return resp && resp.status === 204;
 };
 
-const FETCH = async (estateId) => {
-  return await agencyApi.get(estateId);
+const FETCH = async (agencyId) => {
+  return await agencyApi.get(agencyId);
 };
 
 const agencyStore = {
   state: {
-    estate: {},
-    estates: [],
+    agency: {},
   },
 
   getters: {
     [GET_AGENCY](state) {
-      return state.estate;
+      return state.agency;
     },
   },
 
   mutations: {
-    [UPDATE_ESTATE](state, estate) {
-      state.estate = estate;
+    [UPDATE_AGENCY](state, agency) {
+      state.agency = agency;
     },
-    [CLEAR_ESTATE](state) {
-      state.estate = {};
+    [CLEAR_AGENCY](state) {
+      state.agency = {};
     },
   },
 
@@ -40,7 +39,7 @@ const agencyStore = {
         console.log("empty response...");
         return;
       }
-      commit(UPDATE_ESTATE, resp.data);
+      commit(UPDATE_AGENCY, resp.data);
     },
   },
 };

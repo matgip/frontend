@@ -114,7 +114,7 @@ export default {
         return;
       }
 
-      this.$store.commit("UPDATE_ESTATE", this.agency);
+      this.$store.commit("UPDATE_AGENCY", this.agency);
       this.$emit("open-reviews-card");
     },
 

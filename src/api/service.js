@@ -83,68 +83,12 @@ export class ModeAPI extends ReadOnlyAPI {
   }
 }
 
-class NestedAPI extends ModeAPI {
-  subResources;
-
-  constructor(baseResource, subResources) {
-    super(baseResource);
-    if (!subResources) throw new Error("Sub resource is not provided");
-    this.subResources = subResources;
-  }
-
-  getUrl(baseId, subIds = [], range = "") {
-    if (!baseId) throw Error("base id is not provided");
-    let url = `${this.baseURL}/${this.resource}/${baseId}`;
-    this.subResources.forEach((subResource, idx) => {
-      url += `/${subResource}`;
-      if (subIds[idx]) url += `/${subIds[idx]}`;
-    });
-    if (range.length > 0) {
-      url += `?range=${range}`;
-    }
-    return url;
-  }
-
-  async get(getEntity) {
-    try {
-      const { baseId, subIds, range } = getEntity;
-      if (!baseId) throw Error("id is not provided");
-      const resp = await this.api.get(this.getUrl(baseId, subIds, range));
-      return resp;
-    } catch (err) {
-      this.handleError(err);
-    }
-  }
-
-  async post(postEntity) {
-    try {
-      const { baseId, subIds, data } = postEntity;
-      if (!baseId) throw Error("base id is not provided");
-      const resp = await this.api.post(this.getUrl(baseId, subIds), data);
-      return resp;
-    } catch (err) {
-      this.handleError(err);
-    }
-  }
-
-  async put(putEntity) {
-    try {
-      const { baseId, subIds, data } = putEntity;
-      if (!baseId) throw Error("base id is not provided");
-      const resp = await this.api.put(this.getUrl(baseId, subIds), data);
-      return resp;
-    } catch (err) {
-      this.handleError(err);
-    }
-  }
-}
-
 export const $api = {
   likes: new ModeAPI("likes"),
-  review: new NestedAPI("reviews", ["users"]),
-  // reviewCount: new NestedAPI("reviews", ["count"]),
-  // reviewRatings: new NestedAPI("reviews", ["ratings"]),
-  reviewUserLikes: new NestedAPI("reviews", ["users", "likes"]),
-  reviewsByLike: new NestedAPI("reviews", ["likes"]),
-  reviewsByTime: new NestedAPI("reviews", ["time"]),
+  // review: new NestedAPI("reviews", ["users"]),
+  // // reviewCount: new NestedAPI("reviews", ["count"]),
+  // // reviewRatings: new NestedAPI("reviews", ["ratings"]),
+  // reviewUserLikes: new NestedAPI("reviews", ["users", "likes"]),
+  // reviewsByLike: new NestedAPI("reviews", ["likes"]),
+  // reviewsByTime: new NestedAPI("reviews", ["time"]),
 };

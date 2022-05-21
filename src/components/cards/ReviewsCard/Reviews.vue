@@ -19,7 +19,7 @@
       <BaseButton
         :btn-props="vuetifyButton"
         :icon-props="vuetifyIcon"
-        :on-click="onUpdateLikeAgency"
+        :on-click="onLikeAgency"
         :icon="'fas fa-heart'"
         :button="'좋아요'"
       />
@@ -37,7 +37,7 @@
       v-for="(review, i) in reviewsSelected.slice((page - 1) * MAX_REVIEWS_PER_PAGE, page * MAX_REVIEWS_PER_PAGE)"
       :key="i"
     >
-      <Review :review="review" @like-review="onUpdateLikeReview" />
+      <Review :review="review" @like-review="onLikeReview" />
     </div>
 
     <v-pagination v-bind="vuetifyPagination" v-model="page" :length="pageCount" :total-visible="7" />
@@ -52,6 +52,8 @@ import ReviewDialogButton from "./ReviewDialogButton.vue";
 import Review from "./Review.vue";
 
 import { mapGetters } from "vuex";
+
+import { reviewByLikeApi, reviewByTimeApi, reviewLikeApi } from "@/api/reviews";
 
 export default {
   components: {
@@ -143,19 +145,18 @@ export default {
   },
 
   async mounted() {
-    const maxRange = "0~-1";
-    await this.$_fetchReviews(maxRange);
+    await this.fetch();
 
     this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "UPDATE_ESTATE") {
-        this.$_clearStatistics();
-        await this.$_fetchReviews(maxRange);
+      if (mutation.type === "UPDATE_AGENCY") {
+        this.clear();
+        await this.fetch();
       }
     });
   },
 
   destroyed() {
-    this.$_clearStatistics();
+    this.clear();
   },
 
   methods: {
@@ -163,7 +164,7 @@ export default {
       this.$emit("close-reviews-card");
     },
 
-    async onUpdateLikeAgency() {
+    async onLikeAgency() {
       try {
         const resp = await this.$api.likes.put(this.agency.id, { user_id: this.user.id });
         if (resp.data.result === "already-added") {
@@ -178,27 +179,17 @@ export default {
       }
     },
 
-    async onUpdateLikeReview(userId) {
+    async onLikeReview(userId) {
       try {
-        const resp = await this.$api.reviewUserLikes.post({
-          baseId: this.agency.id,
-          subIds: [userId],
-          data: {
-            user: this.user.id,
-          },
-        });
-        if (resp.data.result === "already-added") {
+        const response = await reviewLikeApi.add(this.agency.id, userId, this.user.id);
+        console.log(response);
+        if (response.result === "already-added") {
           alert("이미 이 리뷰를 좋아합니다.");
           return;
-        }
-
-        await this.$api.reviewsByLike.put({
-          baseId: this.agency.id,
-          data: { user: userId, count: 1 },
-        });
-        if (resp.data.result === "success") {
+        } else if (response.result === "success") {
           alert("이 리뷰를 좋아합니다.");
         }
+        await reviewByLikeApi.added(this.agency.id, userId);
       } catch (err) {
         console.error(err);
       }
@@ -208,118 +199,42 @@ export default {
       this.orderBy = event.currentTarget.id;
     },
 
-    async $_fetchReviews(queryRange) {
-      const mapUserLikeCnt = new Map();
+    async fetch() {
+      const maxRange = "0~-1";
 
       try {
-        const reviewsByLike = await this.$api.reviewsByLike.get({
-          baseId: this.agency.id,
-          range: queryRange,
-        });
-
-        for (let i = 0; i < reviewsByLike.data.length; i++) {
-          const data = reviewsByLike.data[i];
-          const userId = data.value.split(":")[1];
-          const likeCnt = data.score;
-          mapUserLikeCnt.set(`user:${userId}`, likeCnt);
-
-          const resp = await this.$api.review.get({
-            baseId: this.agency.id,
-            subIds: [userId],
-          });
-          const review = resp.data;
-          review.userId = userId;
-          review.likes = likeCnt;
-          review.rating = parseFloat(review.rating);
-
-          this.reviews["like"].unshift(review);
-          this.$_calculate(this.reviews["like"][i]);
-        }
-        // reviewsByLike.data.forEach(async (d, i) => {
-        //   const userId = d.value.split(":")[1];
-        //   const likeCnt = d.score;
-        //   mapUserLikeCnt.set(`user:${userId}`, likeCnt);
-
-        //   const resp = await this.$api.review.get({
-        //     baseId: this.agency.id,
-        //     subIds: [userId],
-        //   });
-        //   const review = resp.data;
-        //   review.userId = userId;
-        //   review.likes = likeCnt;
-        //   review.rating = parseFloat(review.rating);
-
-        //   this.reviews["like"].push(review);
-        //   this.$_calculate(this.reviews["like"][i]);
-        // });
-      } catch (err) {
-        console.error(err);
-      }
-
-      try {
-        const reviewsByTime = await this.$api.reviewsByTime.get({
-          baseId: this.agency.id,
-          range: queryRange,
-        });
-
-        for (let i = 0; i < reviewsByTime.data.length; i++) {
-          const data = reviewsByTime.data[i];
-          const userId = data.value.split(":")[1];
-
-          const resp = await this.$api.review.get({
-            baseId: this.agency.id,
-            subIds: [userId],
-          });
-          const review = resp.data;
-          review.userId = userId;
-          review.likes = mapUserLikeCnt.get(`user:${userId}`);
-          review.rating = parseFloat(review.rating);
-
-          this.reviews["time"].unshift(review);
-        }
-        // reviewsByTime.data.forEach(async (d) => {
-        //   const userId = d.value.split(":")[1];
-
-        //   const resp = await this.$api.review.get({
-        //     baseId: this.agency.id,
-        //     subIds: [userId],
-        //   });
-        //   const review = resp.data;
-        //   review.userId = userId;
-        //   review.likes = mapUserLikeCnt.get(`user:${userId}`);
-        //   review.rating = parseFloat(review.rating);
-
-        //   this.reviews["time"].push(review);
-        // });
+        this.reviews["like"] = await reviewByLikeApi.fetch(this.agency.id, maxRange);
+        this.reviews["time"] = await reviewByTimeApi.fetch(this.agency.id, maxRange);
+        this.calculate(this.reviews["like"]);
       } catch (err) {
         console.error(err);
       }
     },
 
-    $_calculate(review) {
-      this.stats.forEach((stat) => {
-        this.$_addStatistics(stat, review[stat.name]);
-        this.$_replacePercentage(stat);
-      });
+    calculate(reviews) {
+      for (let review of reviews) {
+        this.stats.forEach((stat) => {
+          this.$_accomulate(stat, review[stat.name]);
+          this.$_percentFormula(stat);
+        });
+      }
     },
 
-    $_addStatistics(stat, field) {
+    $_accomulate(stat, field) {
       if (!field) return;
-
       stat.count += 1;
       const matchedIndex = stat.fields.findIndex((f) => f === field);
       stat.data[matchedIndex]++;
     },
 
-    $_replacePercentage(stat) {
+    $_percentFormula(stat) {
       if (stat.count === 0) return;
-
       for (let i = 0; i < stat.data.length; i++) {
         stat.data[i] = Math.floor((stat.data[i] / stat.count) * 100);
       }
     },
 
-    $_clearStatistics() {
+    clear() {
       this.reviews["like"] = [];
       this.reviews["time"] = [];
       this.stats.forEach((stat) => {
