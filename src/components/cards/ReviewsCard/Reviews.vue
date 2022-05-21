@@ -229,7 +229,7 @@ export default {
           review.likes = likeCnt;
           review.rating = parseFloat(review.rating);
 
-          this.reviews["like"].push(review);
+          this.reviews["like"].unshift(review);
           this.$_calculate(this.reviews["like"][i]);
         }
         // reviewsByLike.data.forEach(async (d, i) => {
@@ -272,7 +272,7 @@ export default {
           review.likes = mapUserLikeCnt.get(`user:${userId}`);
           review.rating = parseFloat(review.rating);
 
-          this.reviews["time"].push(review);
+          this.reviews["time"].unshift(review);
         }
         // reviewsByTime.data.forEach(async (d) => {
         //   const userId = d.value.split(":")[1];
