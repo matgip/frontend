@@ -33,7 +33,10 @@
       </v-tabs>
     </div>
 
-    <div v-for="(review, i) in reviewsSelected" :key="i">
+    <div
+      v-for="(review, i) in reviewsSelected.slice((page - 1) * MAX_REVIEWS_PER_PAGE, page * MAX_REVIEWS_PER_PAGE)"
+      :key="i"
+    >
       <Review :review="review" @like-review="onUpdateLikeReview" />
     </div>
 
@@ -59,7 +62,8 @@ export default {
   },
 
   data: () => ({
-    page: 0,
+    page: 1,
+    MAX_REVIEWS_PER_PAGE: 4,
     orderBy: "like",
     stats: [
       {
@@ -133,13 +137,12 @@ export default {
 
     pageCount() {
       const reviewCnt = this.reviews[this.orderBy].length;
-      if (reviewCnt <= 7) return 1;
-      return Math.trunc(reviewCnt / 7 + 1);
+      if (reviewCnt <= this.MAX_REVIEWS_PER_PAGE) return 1;
+      return Math.trunc(reviewCnt / this.MAX_REVIEWS_PER_PAGE + 1);
     },
   },
 
   async mounted() {
-    this.page = 1;
     const maxRange = "0~-1";
     await this.$_fetchReviews(maxRange);
 

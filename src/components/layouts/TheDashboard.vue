@@ -51,7 +51,10 @@
             <v-divider />
             <h3 class="dashboard_agencies_title">근처 베스트 부동산</h3>
             <template
-              v-for="agency in agencies.slice((agencyPage - 1) * maxAgenciesPerPage, agencyPage * maxAgenciesPerPage)"
+              v-for="agency in agencies.slice(
+                (agencyPage - 1) * MAX_AGENCIES_PER_PAGE,
+                agencyPage * MAX_AGENCIES_PER_PAGE
+              )"
             >
               <Agency :agency="agency" :key="agency.id" @open-reviews-card="onOpenReviews()" />
             </template>
@@ -93,7 +96,7 @@ export default {
     return {
       agencyPage: 1,
       agencies: [],
-      maxAgenciesPerPage: 4,
+      MAX_AGENCIES_PER_PAGE: 4,
       isScrollUp: false,
       menuVisibleFlag: false,
       reviewVisibieFlag: false,
@@ -117,8 +120,8 @@ export default {
 
     agencyPageCount() {
       const agenciesPageCnt = this.agencies.length;
-      if (agenciesPageCnt <= this.maxAgenciesPerPage) return 1;
-      return Math.trunc(agenciesPageCnt / this.maxAgenciesPerPage + 1);
+      if (agenciesPageCnt <= this.MAX_AGENCIES_PER_PAGE) return 1;
+      return Math.trunc(agenciesPageCnt / this.MAX_AGENCIES_PER_PAGE + 1);
     },
   },
 
