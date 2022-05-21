@@ -214,9 +214,10 @@ export default {
           range: queryRange,
         });
 
-        reviewsByLike.data.forEach(async (d, i) => {
-          const userId = d.value.split(":")[1];
-          const likeCnt = d.score;
+        for (let i = 0; i < reviewsByLike.data.length; i++) {
+          const data = reviewsByLike.data[i];
+          const userId = data.value.split(":")[1];
+          const likeCnt = data.score;
           mapUserLikeCnt.set(`user:${userId}`, likeCnt);
 
           const resp = await this.$api.review.get({
@@ -230,7 +231,24 @@ export default {
 
           this.reviews["like"].push(review);
           this.$_calculate(this.reviews["like"][i]);
-        });
+        }
+        // reviewsByLike.data.forEach(async (d, i) => {
+        //   const userId = d.value.split(":")[1];
+        //   const likeCnt = d.score;
+        //   mapUserLikeCnt.set(`user:${userId}`, likeCnt);
+
+        //   const resp = await this.$api.review.get({
+        //     baseId: this.agency.id,
+        //     subIds: [userId],
+        //   });
+        //   const review = resp.data;
+        //   review.userId = userId;
+        //   review.likes = likeCnt;
+        //   review.rating = parseFloat(review.rating);
+
+        //   this.reviews["like"].push(review);
+        //   this.$_calculate(this.reviews["like"][i]);
+        // });
       } catch (err) {
         console.error(err);
       }
@@ -241,8 +259,9 @@ export default {
           range: queryRange,
         });
 
-        reviewsByTime.data.forEach(async (d) => {
-          const userId = d.value.split(":")[1];
+        for (let i = 0; i < reviewsByTime.data.length; i++) {
+          const data = reviewsByTime.data[i];
+          const userId = data.value.split(":")[1];
 
           const resp = await this.$api.review.get({
             baseId: this.agency.id,
@@ -254,7 +273,21 @@ export default {
           review.rating = parseFloat(review.rating);
 
           this.reviews["time"].push(review);
-        });
+        }
+        // reviewsByTime.data.forEach(async (d) => {
+        //   const userId = d.value.split(":")[1];
+
+        //   const resp = await this.$api.review.get({
+        //     baseId: this.agency.id,
+        //     subIds: [userId],
+        //   });
+        //   const review = resp.data;
+        //   review.userId = userId;
+        //   review.likes = mapUserLikeCnt.get(`user:${userId}`);
+        //   review.rating = parseFloat(review.rating);
+
+        //   this.reviews["time"].push(review);
+        // });
       } catch (err) {
         console.error(err);
       }
