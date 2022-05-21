@@ -131,6 +131,7 @@ export default {
     },
 
     agencies: function() {
+      if (this.reviewVisibieFlag) this.reviewVisibieFlag = false;
       if (this.agencies.length !== 0) this.scrollUp();
     },
   },
@@ -142,8 +143,7 @@ export default {
     async onSearchByCenter() {
       try {
         const { y, x } = this.map.getCenter();
-        const agencies = mergesort(this.$_comparator, await agencyApi.searchByCenter(x, y));
-        this.agencies = agencies;
+        this.agencies = mergesort(this.$_comparator, await agencyApi.searchByCenter(x, y));
       } catch (err) {
         console.error(err);
       }
