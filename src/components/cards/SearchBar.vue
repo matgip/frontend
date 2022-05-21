@@ -10,9 +10,7 @@
     <!-- 검색 결과 없음 -->
     <template v-slot:no-data>
       <v-list-item>
-        <v-list-item-title>
-          부동산을 검색해 보세요! (예:영통역 근처 부동산)
-        </v-list-item-title>
+        <v-list-item-title> 부동산을 검색해 보세요! (예:영통역 근처 부동산) </v-list-item-title>
       </v-list-item>
     </template>
 
@@ -29,6 +27,10 @@
       <v-list-item-content>
         <v-list-item-title v-text="item.place_name"></v-list-item-title>
         <v-list-item-subtitle v-text="item.address_name"></v-list-item-subtitle>
+        <v-row v-bind="vuetifyRow">
+          <v-rating v-bind="vuetifyStar" :value="item.stars"></v-rating>
+          <div v-bind="vuetifyStarText">({{ item.stars }})</div>
+        </v-row>
       </v-list-item-content>
     </template>
   </v-autocomplete>
@@ -69,6 +71,20 @@ export default {
       small: true,
       class: "white--text",
       color: "deep-orange",
+    },
+    vuetifyRow: {
+      align: "center",
+      class: "ma-0",
+    },
+    vuetifyStar: {
+      size: 18,
+      color: "amber",
+      dense: true,
+      readonly: true,
+      "half-increments": true,
+    },
+    vuetifyStarText: {
+      class: "grey--text pt-1",
     },
     fontAwesomeMap: "fas fa-map-marked-alt",
   }),
