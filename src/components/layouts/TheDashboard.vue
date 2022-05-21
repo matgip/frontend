@@ -126,12 +126,9 @@ export default {
     agency: function(val) {
       if (Object.keys(this.agency).length === 0) return;
       val.type = "agency";
-      // clear searched agencies
-      this.agencies = [];
     },
 
     agencies: function() {
-      if (this.reviewVisibieFlag) this.reviewVisibieFlag = false;
       if (this.agencies.length !== 0) this.scrollUp();
     },
   },
