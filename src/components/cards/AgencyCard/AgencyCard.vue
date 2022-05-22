@@ -108,13 +108,13 @@ export default {
       return `/api/upload/${agencyId}?image=${imgNum}`;
     },
 
-    launchReviewCard() {
+    async launchReviewCard() {
       if (this.$_isloggedIn() === false) {
         alert("로그인 후, 사용 가능합니다.");
         return;
       }
 
-      this.$store.commit("UPDATE_AGENCY", this.agency);
+      await this.$store.dispatch("agencySelected", this.agency);
       this.$emit("open-reviews-card");
     },
 

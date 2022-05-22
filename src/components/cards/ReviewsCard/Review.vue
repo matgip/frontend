@@ -30,7 +30,7 @@
             <BaseButton
               :btn-props="vuetifyButton"
               :icon-props="vuetifyButtonIcon"
-              :on-click="handleEventLike"
+              :on-click="emitLike"
               :icon="'fas fa-thumbs-up'"
               :button="review.likes"
             />
@@ -105,7 +105,7 @@ export default {
   },
 
   methods: {
-    handleEventLike() {
+    emitLike() {
       this.$emit("like-review", this.review.userId);
     },
   },

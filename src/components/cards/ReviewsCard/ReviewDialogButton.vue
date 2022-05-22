@@ -173,22 +173,25 @@ export default {
   methods: {
     async onSubmit() {
       try {
-        const resp = await reviewApi.get({ baseId: this.agency.id, subIds: [this.user.id] });
-        if (resp && resp.status === 204) {
+        const response = await reviewApi.get({ baseId: this.agency.id, subIds: [this.user.id] });
+        if (response && response.status === 204) {
           const current = new Date();
           await reviewApi.post({
             baseId: this.agency.id,
             data: {
+              time: current.toLocaleDateString(),
               userId: this.user.id,
+              // 리뷰 내용
+              title: this.title,
+              text: this.comments,
+              // 작성자 정보
               avatar: this.user.avatar,
               nickname: this.user.nickname,
-              time: current.toLocaleDateString(),
+              // 세부 리뷰 항목
               rating: this.rating,
               kindness: this.checkBoxes[0].select,
               price: this.checkBoxes[1].select,
               contract: this.checkBoxes[2].select,
-              title: this.title,
-              text: this.comments,
             },
           });
         }

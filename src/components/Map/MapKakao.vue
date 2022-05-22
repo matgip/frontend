@@ -35,8 +35,8 @@ export default {
   },
 
   methods: {
-    onClickAgency(place) {
-      this.$store.dispatch("agencySelected", place);
+    async onClickAgency(place) {
+      await this.$store.dispatch("agencySelected", place);
     },
   },
 };
