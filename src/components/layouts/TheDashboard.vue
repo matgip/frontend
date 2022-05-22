@@ -131,7 +131,6 @@ export default {
       fontAwesomeArrowUp: "fa-solid fa-arrow-up",
       fontAwesomeArrowDown: "fa-solid fa-arrow-down",
       fontAwesomeBar: "fas fa-bars",
-      fontAwesomeFilter: "fa-solid fa-filter",
     };
   },
 

@@ -3,7 +3,7 @@ import Vuex from "vuex";
 
 // Persist user logged in data even though refresh(f5) occurred
 // Reference: https://www.npmjs.com/package/vuex-persistedstate
-import createPersistedState from "vuex-persistedstate";
+// import createPersistedState from "vuex-persistedstate";
 import storePlugins from "@/plugins/storePlugins";
 
 Vue.use(Vuex);
@@ -22,9 +22,9 @@ const store = new Vuex.Store({
     mapStore: mapStore,
   },
   plugins: [
-    createPersistedState({
-      paths: ["user"],
-    }),
+    // createPersistedState({
+    //   paths: ["user"],
+    // }),
     storePlugins,
   ],
 });
