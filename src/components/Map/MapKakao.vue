@@ -36,7 +36,7 @@ export default {
 
   methods: {
     async onClickAgency(place) {
-      await this.$store.dispatch("agencySelected", place);
+      await this.$store.dispatch("agencySelected", { agencyId: place.id, userAge: this.user.ageRange });
     },
   },
 };

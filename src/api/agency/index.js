@@ -43,6 +43,24 @@ class AgencyAPI extends ModeAPI {
       this.handleError(err);
     }
   }
+
+  async increaseViews(agencyId, viewEntity) {
+    try {
+      const resp = await this.put(agencyId, viewEntity);
+      return resp.data;
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
+  async getViews(agencyId) {
+    try {
+      const resp = await this.api.get(this.getUrl(agencyId) + "/views");
+      return resp.data;
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
 }
 
 export default new AgencyAPI("agency");

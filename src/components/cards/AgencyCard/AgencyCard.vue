@@ -114,12 +114,12 @@ export default {
         return;
       }
 
-      await this.$store.dispatch("agencySelected", this.agency);
+      await this.$store.dispatch("agencySelected", { agencyId: this.agency.id, userAge: this.user.ageRange });
       this.$emit("open-reviews-card");
     },
 
     $_isloggedIn() {
-      return this.user != null;
+      return this.user !== null;
     },
   },
 };
