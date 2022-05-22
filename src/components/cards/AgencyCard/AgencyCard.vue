@@ -24,8 +24,11 @@
           </v-row>
         </p>
       </div>
-      <!-- 부동산 정보(위치, 전화번호) -->
+      <!-- 부동산 정보(조회수, 위치, 전화번호) -->
       <div class="agency_info_container">
+        <p>
+          <v-icon v-bind="vuetifyIcon">{{ fontAwesomeEyes }}</v-icon> {{ views }} 명이 조회함
+        </p>
         <p>
           <v-icon v-bind="vuetifyIcon">{{ fontAwesomeMarker }}</v-icon> {{ agency.address_name }}
         </p>
@@ -53,6 +56,12 @@
 import { mapGetters } from "vuex";
 
 export default {
+  mounted() {
+    for (const view of Object.values(this.agency.views)) {
+      this.views += parseInt(view);
+    }
+  },
+
   props: {
     agency: {
       type: Object,
@@ -61,6 +70,7 @@ export default {
   },
 
   data: () => ({
+    views: 0,
     images: [1, 2, 3, 4, 5, 6],
     vuetifyCarousel: {
       "hide-delimiters": true,
@@ -95,6 +105,7 @@ export default {
     },
     fontAwesomeMarker: "fas fa-map-marker-alt",
     fontAwesomeBook: "fas fa-book",
+    fontAwesomeEyes: "fas fa-eye",
   }),
 
   computed: {

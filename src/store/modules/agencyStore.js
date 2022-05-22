@@ -36,7 +36,7 @@ const agencyStore = {
         console.log("empty agency response...");
         return;
       }
-      await agencyApi.increaseViews(agencyId, { agencyId: agencyId, ageRange: userAge });
+      if (userAge !== null) await agencyApi.increaseViews(agencyId, { agencyId: agencyId, ageRange: userAge });
       response.data.views = await agencyApi.getViews(agencyId);
       commit(UPDATE_AGENCY, response.data);
     },
