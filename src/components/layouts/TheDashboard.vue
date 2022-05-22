@@ -168,11 +168,20 @@ export default {
       }
       return sumOfViews;
     },
+    $_calDistFromCenter(agency) {
+      const { y, x } = this.map.getCenter();
+      const distX = Math.abs(y - agency.y) ** 2;
+      const distY = Math.abs(x - agency.x) ** 2;
+      return distX + distY;
+    },
     $_orderByViews(a, b) {
       return this.$_sumOfViews(a) < this.$_sumOfViews(b);
     },
     $_orderByStars(a, b) {
       return a.stars < b.stars;
+    },
+    $_orderByDistance(a, b) {
+      return this.$_calDistFromCenter(a) > this.$_calDistFromCenter(b);
     },
 
     async onSearchByCenter() {
@@ -209,6 +218,9 @@ export default {
           break;
         case "orderByRating":
           this.comparator = this.$_orderByStars;
+          break;
+        case "orderByDistance":
+          this.comparator = this.$_orderByDistance;
           break;
       }
       this.sorted = mergesort(this.comparator, this.sorted);

@@ -33,6 +33,7 @@ export default {
         items: [
           { value: "orderByViews", text: "조회수" },
           { value: "orderByRating", text: "평점순" },
+          { value: "orderByDistance", text: "가까운 거리순" },
         ],
       },
 
