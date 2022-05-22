@@ -213,6 +213,7 @@ export default {
       }
       this.sorted = mergesort(this.comparator, this.sorted);
       this.filterVisibleFlag = false;
+      this.agencyPage = 1;
     },
 
     onOpenFilter() {
