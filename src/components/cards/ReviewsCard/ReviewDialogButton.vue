@@ -34,7 +34,7 @@
         <!-- 리뷰 체크 박스 -->
         <div v-for="chkbox in checkBoxes" :key="chkbox.name">
           <v-divider />
-          <BaseCheckBoxGroup :check-box-object="chkbox" :on-change="handleChangeCheckBoxEvent" />
+          <BaseCheckBoxGroup :check-box-object="chkbox" :on-change="emitChange" />
         </div>
         <v-divider />
 
@@ -201,7 +201,7 @@ export default {
       }
     },
 
-    handleChangeCheckBoxEvent(name, newSelect) {
+    emitChange(name, newSelect) {
       const index = this.checkBoxes.findIndex((chkBox) => {
         return chkBox.name === name;
       });

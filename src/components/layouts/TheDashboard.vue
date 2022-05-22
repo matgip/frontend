@@ -36,28 +36,39 @@
         </v-btn>
 
         <!-- 검색 결과 없음 -->
-        <div v-show="!agency.id && agencies.length === 0">
+        <div v-show="!agency.id && sorted.length === 0">
           <NoContent />
         </div>
 
-        <!-- 리뷰 -->
-        <div v-if="reviewVisibieFlag">
+        <div v-if="reviewVisibleFlag">
+          <!-- 리뷰 -->
           <Reviews @close-reviews-card="onCloseReviews()" />
         </div>
-        <!-- 부동산 -->
         <div v-else>
+          <!-- 선택된 부동산 -->
           <Agency v-if="agency.id" :agency="agency" :key="agency.id" @open-reviews-card="onOpenReviews()" />
-          <div v-if="agencies.length !== 0">
-            <v-divider />
-            <h3 class="dashboard_agencies_title">근처 베스트 부동산</h3>
+
+          <!-- 주변 부동산 -->
+          <div v-if="sorted.length !== 0">
+            <div class="dashboard_agencies_title_container">
+              <h3 class="mr-14">근처 부동산</h3>
+              <img src="@/assets/images/filter.png" width="32" height="32" @click="onOpenFilter()" />
+              <div class="dashboard_agencies_filter" @click="onOpenFilter()">
+                필터
+              </div>
+            </div>
+
+            <div v-if="filterVisibleFlag"><SearchFilter @close-filter-card="onCloseFilter()" /></div>
+
             <template
-              v-for="agency in agencies.slice(
+              v-for="agency in sorted.slice(
                 (agencyPage - 1) * MAX_AGENCIES_PER_PAGE,
                 agencyPage * MAX_AGENCIES_PER_PAGE
               )"
             >
               <Agency :agency="agency" :key="agency.id" @open-reviews-card="onOpenReviews()" />
             </template>
+
             <v-pagination
               v-bind="vuetifyPagination"
               v-model="agencyPage"
@@ -80,6 +91,7 @@ import Menu from "@/components/cards/MenuCard/Menu.vue";
 import Agency from "@/components/cards/AgencyCard/AgencyCard.vue";
 import NoContent from "@/components/cards/NoContentCard/NoContent.vue";
 import Reviews from "@/components/cards/ReviewsCard/Reviews.vue";
+import SearchFilter from "@/components/cards/SearchFilterCard/SearchFilter.vue";
 
 import { mapGetters } from "vuex";
 
@@ -90,25 +102,33 @@ export default {
     Agency,
     NoContent,
     Reviews,
+    SearchFilter,
   },
 
   data() {
     return {
       agencyPage: 1,
       agencies: [],
+      sorted: [],
       MAX_AGENCIES_PER_PAGE: 4,
       isScrollUp: false,
+
       menuVisibleFlag: false,
-      reviewVisibieFlag: false,
+      filterVisibleFlag: false,
+      reviewVisibleFlag: false,
 
       vuetifyPagination: {
         color: "deep-orange",
         circle: true,
         class: "mt-10",
       },
+      vuetifyFilter: {
+        color: "black",
+      },
       fontAwesomeArrowUp: "fa-solid fa-arrow-up",
       fontAwesomeArrowDown: "fa-solid fa-arrow-down",
       fontAwesomeBar: "fas fa-bars",
+      fontAwesomeFilter: "fa-solid fa-filter",
     };
   },
 
@@ -131,8 +151,8 @@ export default {
       val.type = "agency";
     },
 
-    agencies: function() {
-      if (this.agencies.length !== 0) this.scrollUp();
+    sorted: function() {
+      if (this.sorted.length !== 0) this.scrollUp();
     },
   },
 
@@ -143,7 +163,8 @@ export default {
     async onSearchByCenter() {
       try {
         const { y, x } = this.map.getCenter();
-        this.agencies = mergesort(this.$_comparator, await agencyApi.searchByCenter(x, y));
+        this.agencies = await agencyApi.searchByCenter(x, y);
+        this.sorted = mergesort(this.$_comparator, await agencyApi.searchByCenter(x, y));
       } catch (err) {
         console.error(err);
       }
@@ -166,20 +187,23 @@ export default {
       }
     },
 
+    onOpenFilter() {
+      this.filterVisibleFlag = true;
+    },
+    onCloseFilter() {
+      this.filterVisibleFlag = false;
+    },
     onOpenMenu() {
       this.menuVisibleFlag = true;
     },
-
     onCloseMenu() {
       this.menuVisibleFlag = false;
     },
-
     onOpenReviews() {
-      this.reviewVisibieFlag = true;
+      this.reviewVisibleFlag = true;
     },
-
     onCloseReviews() {
-      this.reviewVisibieFlag = false;
+      this.reviewVisibleFlag = false;
     },
   },
 };
@@ -199,8 +223,21 @@ export default {
   overflow-y: auto;
 }
 
-.dashboard_agencies_title {
-  margin: 14px 14px;
+.dashboard_agencies_title_container {
+  margin: 14px;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.dashboard_agencies_filter {
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 8px;
+  color: gray;
 }
 
 /* Scroll button */
