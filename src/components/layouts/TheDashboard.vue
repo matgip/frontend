@@ -58,7 +58,9 @@
               </div>
             </div>
 
-            <div v-if="filterVisibleFlag"><SearchFilter @close-filter-card="onCloseFilter()" /></div>
+            <div v-if="filterVisibleFlag">
+              <SearchFilter @close-filter-card="onCloseFilter()" @apply-filter="onApplyFilter" />
+            </div>
 
             <template
               v-for="agency in sorted.slice(
@@ -110,6 +112,7 @@ export default {
       agencyPage: 1,
       agencies: [],
       sorted: [],
+      comparator: this.$_orderByStars,
       MAX_AGENCIES_PER_PAGE: 4,
       isScrollUp: false,
 
@@ -157,14 +160,26 @@ export default {
   },
 
   methods: {
-    $_comparator(a, b) {
+    $_sumOfViews(agency) {
+      if (agency.views === null || Object.keys(agency.views) === 0) return 0;
+      let sumOfViews = 0;
+      for (const view of Object.values(agency.views)) {
+        sumOfViews += parseInt(view);
+      }
+      return sumOfViews;
+    },
+    $_orderByViews(a, b) {
+      return this.$_sumOfViews(a) < this.$_sumOfViews(b);
+    },
+    $_orderByStars(a, b) {
       return a.stars < b.stars;
     },
+
     async onSearchByCenter() {
       try {
         const { y, x } = this.map.getCenter();
         this.agencies = await agencyApi.searchByCenter(x, y);
-        this.sorted = mergesort(this.$_comparator, await agencyApi.searchByCenter(x, y));
+        this.sorted = mergesort(this.comparator, await agencyApi.searchByCenter(x, y));
       } catch (err) {
         console.error(err);
       }
@@ -185,6 +200,19 @@ export default {
         item.classList.toggle("scrolled");
         this.isScrollUp = true;
       }
+    },
+
+    async onApplyFilter(filter) {
+      switch (filter) {
+        case "orderByViews":
+          this.comparator = this.$_orderByViews;
+          break;
+        case "orderByRating":
+          this.comparator = this.$_orderByStars;
+          break;
+      }
+      this.sorted = mergesort(this.comparator, this.sorted);
+      this.filterVisibleFlag = false;
     },
 
     onOpenFilter() {

@@ -29,6 +29,7 @@ export default {
       checkBox: {
         name: "filter",
         title: "정렬 필터",
+        select: null,
         items: [
           { value: "orderByViews", text: "조회수" },
           { value: "orderByRating", text: "평점순" },
@@ -53,12 +54,11 @@ export default {
 
   methods: {
     emitChange(name, newSelect) {
-      console.log("NAME: ", name);
-      console.log("NEW SELECT: ", newSelect);
+      this.checkBox.select = newSelect;
     },
 
     onApplyFilter() {
-      console.log("TEST");
+      this.$emit("apply-filter", this.checkBox.select);
     },
 
     onCloseCard() {
