@@ -295,6 +295,9 @@ export default {
 
   #dashboard_scroll_button {
     display: block;
+
+    color: white;
+    background-color: #ff5722;
   }
 }
 
