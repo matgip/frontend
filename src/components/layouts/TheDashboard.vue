@@ -24,11 +24,11 @@
       </v-toolbar>
     </section>
 
-    <section v-if="menuVisibleFlag">
+    <section v-if="isMenuVisible">
       <Menu @close-menu-card="onCloseMenu()" />
     </section>
 
-    <div id="dashboard_container">
+    <div id="dashboard_container" :class="{ scrolled: isScrollUp }">
       <section>
         <v-btn id="dashboard_scroll_button" @click="scrollToggle" block>
           <v-icon v-if="!isScrollUp">{{ fontAwesomeArrowUp }}</v-icon>
@@ -40,7 +40,7 @@
           <NoContent />
         </div>
 
-        <div v-if="reviewVisibleFlag">
+        <div v-if="isReviewsVisible">
           <!-- 리뷰 -->
           <Reviews @close-reviews-card="onCloseReviews()" />
         </div>
@@ -58,7 +58,7 @@
               </div>
             </div>
 
-            <div v-if="filterVisibleFlag">
+            <div v-if="isFilterVisible">
               <SearchFilter @close-filter-card="onCloseFilter()" @apply-filter="onApplyFilter" />
             </div>
 
@@ -116,9 +116,9 @@ export default {
       MAX_AGENCIES_PER_PAGE: 4,
       isScrollUp: false,
 
-      menuVisibleFlag: false,
-      filterVisibleFlag: false,
-      reviewVisibleFlag: false,
+      isMenuVisible: false,
+      isFilterVisible: false,
+      isReviewsVisible: false,
 
       vuetifyPagination: {
         color: "deep-orange",
@@ -195,19 +195,11 @@ export default {
 
     // Scroll
     scrollToggle() {
-      const item = document.getElementById("dashboard_container");
-      item.classList.toggle("scrolled");
-
-      if (!item.classList.contains("scrolled")) this.isScrollUp = false;
-      else this.isScrollUp = true;
+      this.isScrollUp = !this.isScrollUp;
     },
 
     scrollUp() {
-      const item = document.getElementById("dashboard_container");
-      if (!item.classList.contains("scrolled")) {
-        item.classList.toggle("scrolled");
-        this.isScrollUp = true;
-      }
+      this.isScrollUp = true;
     },
 
     async onApplyFilter(filter) {
@@ -223,27 +215,27 @@ export default {
           break;
       }
       this.sorted = mergesort(this.comparator, this.sorted);
-      this.filterVisibleFlag = false;
+      this.isFilterVisible = false;
       this.agencyPage = 1;
     },
 
     onOpenFilter() {
-      this.filterVisibleFlag = true;
+      this.isFilterVisible = true;
     },
     onCloseFilter() {
-      this.filterVisibleFlag = false;
+      this.isFilterVisible = false;
     },
     onOpenMenu() {
-      this.menuVisibleFlag = true;
+      this.isMenuVisible = true;
     },
     onCloseMenu() {
-      this.menuVisibleFlag = false;
+      this.isMenuVisible = false;
     },
     onOpenReviews() {
-      this.reviewVisibleFlag = true;
+      this.isReviewsVisible = true;
     },
     onCloseReviews() {
-      this.reviewVisibleFlag = false;
+      this.isReviewsVisible = false;
     },
   },
 };
