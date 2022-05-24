@@ -205,7 +205,7 @@ export default {
       this.endY = e.changedTouches[0].clientY;
 
       if (this.startY - this.endY >= 100) this.isScrollUp = true;
-      if (this.startY - this.endY <= -350) {
+      if (this.startY - this.endY <= -325) {
         this.isScrollUp = false;
       }
     },
