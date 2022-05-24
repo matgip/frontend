@@ -28,7 +28,7 @@
       <Menu @close-menu-card="onCloseMenu()" />
     </section>
 
-    <div id="dashboard_container" :class="{ scrolled: isScrollUp }">
+    <div id="dashboard_container" :class="{ scrolled: isScrollUp }" v-scroll:#dashboard_container="onScroll">
       <section>
         <v-btn id="dashboard_scroll_button" @click="scrollToggle" block>
           <v-icon v-if="!isScrollUp">{{ fontAwesomeArrowUp }}</v-icon>
@@ -194,6 +194,9 @@ export default {
     },
 
     // Scroll
+    onScroll() {
+      this.scrollToggle();
+    },
     scrollToggle() {
       this.isScrollUp = !this.isScrollUp;
     },
