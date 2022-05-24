@@ -28,7 +28,7 @@
       <Menu @close-menu-card="onCloseMenu()" />
     </section>
 
-    <div id="dashboard_container" :class="{ scrolled: isScrollUp }" @wheel="onScroll">
+    <div id="dashboard_container" :class="{ scrolled: isScrollUp }" @touchmove="onTouchMove" @touchstart="onTouchStart">
       <section>
         <v-btn id="dashboard_scroll_button" @click="scrollToggle" block>
           <v-icon v-show="!isScrollUp">{{ fontAwesomeArrowUp }}</v-icon>
@@ -114,6 +114,12 @@ export default {
       sorted: [],
       comparator: this.$_orderByStars,
       MAX_AGENCIES_PER_PAGE: 4,
+      // Touch move
+      startY: 0,
+      startX: 0,
+      moveY: 0,
+      moveX: 0,
+
       isScrollUp: false,
 
       isMenuVisible: false,
@@ -193,10 +199,20 @@ export default {
       }
     },
 
-    // Scroll
-    onScroll(e) {
-      this.isScrollUp = e.deltaY < 0 ? true : false;
+    onTouchStart(e) {
+      this.startY = e.touches[0].clientY;
+      this.startX = e.touches[0].clientX;
     },
+
+    onTouchMove(e) {
+      this.moveY = e.touches[0].clientY;
+      this.moveX = e.touches[0].clientX;
+
+      if (this.startY - this.moveY >= 200) this.isScrollUp = true;
+      if (this.startY - this.moveY <= -200) this.isScrollUp = false;
+    },
+
+    // Scroll
     scrollToggle() {
       this.isScrollUp = !this.isScrollUp;
     },
