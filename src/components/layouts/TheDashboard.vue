@@ -208,8 +208,8 @@ export default {
       this.moveY = e.touches[0].clientY;
       this.moveX = e.touches[0].clientX;
 
-      if (this.startY - this.moveY >= 200) this.isScrollUp = true;
-      if (this.startY - this.moveY <= -200) this.isScrollUp = false;
+      if (this.startY - this.moveY >= 100) this.isScrollUp = true;
+      if (this.startY - this.moveY <= -100) this.isScrollUp = false;
     },
 
     // Scroll
