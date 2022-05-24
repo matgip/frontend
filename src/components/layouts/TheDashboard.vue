@@ -28,11 +28,11 @@
       <Menu @close-menu-card="onCloseMenu()" />
     </section>
 
-    <div id="dashboard_container" :class="{ scrolled: isScrollUp }" v-scroll:#dashboard_container="onScroll">
+    <div id="dashboard_container" :class="{ scrolled: isScrollUp }" @wheel="onScroll">
       <section>
         <v-btn id="dashboard_scroll_button" @click="scrollToggle" block>
-          <v-icon v-if="!isScrollUp">{{ fontAwesomeArrowUp }}</v-icon>
-          <v-icon v-else>{{ fontAwesomeArrowDown }}</v-icon>
+          <v-icon v-show="!isScrollUp">{{ fontAwesomeArrowUp }}</v-icon>
+          <v-icon v-show="isScrollUp">{{ fontAwesomeArrowDown }}</v-icon>
         </v-btn>
 
         <!-- 검색 결과 없음 -->
@@ -194,8 +194,8 @@ export default {
     },
 
     // Scroll
-    onScroll() {
-      this.scrollToggle();
+    onScroll(e) {
+      this.isScrollUp = e.deltaY < 0 ? true : false;
     },
     scrollToggle() {
       this.isScrollUp = !this.isScrollUp;
