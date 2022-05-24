@@ -307,7 +307,7 @@ export default {
   }
 
   #dashboard_container.scrolled {
-    top: 0%;
+    top: 5%;
   }
 
   #dashboard_scroll_button {
