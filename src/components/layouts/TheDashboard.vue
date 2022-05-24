@@ -116,9 +116,7 @@ export default {
       MAX_AGENCIES_PER_PAGE: 4,
       // Touch move
       startY: 0,
-      startX: 0,
-      moveY: 0,
-      moveX: 0,
+      endY: 0,
 
       isScrollUp: false,
 
@@ -201,15 +199,15 @@ export default {
 
     onTouchStart(e) {
       this.startY = e.touches[0].clientY;
-      this.startX = e.touches[0].clientX;
     },
 
     onTouchEnd(e) {
-      this.moveY = e.changedTouches[0].clientY;
-      this.moveX = e.changedTouches[0].clientX;
+      this.endY = e.changedTouches[0].clientY;
 
-      if (this.startY - this.moveY >= 100) this.isScrollUp = true;
-      if (this.startY - this.moveY <= -100) this.isScrollUp = false;
+      if (this.startY - this.endY >= 100) this.isScrollUp = true;
+      if (this.startY - this.endY <= -300) {
+        this.isScrollUp = false;
+      }
     },
 
     // Scroll
