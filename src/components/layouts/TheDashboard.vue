@@ -205,7 +205,7 @@ export default {
       this.endY = e.changedTouches[0].clientY;
 
       if (this.startY - this.endY >= 100) this.isScrollUp = true;
-      if (this.startY - this.endY <= -325) {
+      if (this.startY - this.endY <= -314) {
         this.isScrollUp = false;
       }
     },
@@ -307,7 +307,7 @@ export default {
   }
 
   #dashboard_container.scrolled {
-    top: 5%;
+    top: 0%;
   }
 
   #dashboard_scroll_button {
