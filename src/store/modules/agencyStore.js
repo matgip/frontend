@@ -30,13 +30,13 @@ const agencyStore = {
 
   actions: {
     async agencySelected({ commit }, agencyUser) {
-      const { agencyId, userAge } = agencyUser;
+      const { agencyId, user } = agencyUser;
       const response = await agencyApi.get(agencyId);
       if (isEmptyResponse(response)) {
         console.log("empty agency response...");
         return;
       }
-      if (userAge !== null) await agencyApi.increaseViews(agencyId, { agencyId: agencyId, ageRange: userAge });
+      if (user.userId !== null) await agencyApi.increaseViews(agencyId, { agencyId: agencyId, user: user });
       response.data.views = await agencyApi.getViews(agencyId);
       commit(UPDATE_AGENCY, response.data);
     },

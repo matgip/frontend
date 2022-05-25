@@ -36,10 +36,14 @@ export default {
 
   methods: {
     async onClickAgency(place) {
+      const userId = this.user !== null ? this.user.id : null;
       const ageRange = this.user !== null ? this.user.ageRange : null;
       await this.$store.dispatch("agencySelected", {
         agencyId: place.id,
-        userAge: ageRange,
+        user: {
+          userId: userId,
+          userAge: ageRange,
+        },
       });
     },
   },

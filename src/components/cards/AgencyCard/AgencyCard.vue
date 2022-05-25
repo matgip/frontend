@@ -125,7 +125,10 @@ export default {
         return;
       }
 
-      await this.$store.dispatch("agencySelected", { agencyId: this.agency.id, userAge: this.user.ageRange });
+      await this.$store.dispatch("agencySelected", {
+        agencyId: this.agency.id,
+        user: { userId: this.user.id, userAge: this.user.ageRange },
+      });
       this.$emit("open-reviews-card");
     },
 
