@@ -2,17 +2,19 @@
   <div>
     <section>
       <v-toolbar class="deep-orange">
+        <v-icon v-bind="vuetifyBuildingIcon">{{ fontAwesomeBuilding }}</v-icon>
+
         <!-- 서치바 -->
         <Search />
 
         <!-- Menu 버튼 -->
         <v-btn icon @click="onOpenMenu()">
-          <v-icon>{{ fontAwesomeBar }}</v-icon>
+          <v-icon color="white">{{ fontAwesomeBar }}</v-icon>
         </v-btn>
 
         <!-- 하단 서치바 table -->
         <template v-slot:extension>
-          <v-tabs color="white" slider-color="white">
+          <v-tabs v-bind="vuetifyTabs">
             <v-tab @click="onSearchByCenter()">
               근처 부동산
             </v-tab>
@@ -24,11 +26,11 @@
       </v-toolbar>
     </section>
 
-    <section v-if="isMenuVisible">
+    <section v-show="isMenuVisible">
       <Menu @close-menu-card="onCloseMenu()" />
     </section>
 
-    <div id="dashboard_container" :class="{ scrolled: isScrollUp }" @touchend="onTouchEnd" @touchstart="onTouchStart">
+    <div id="dashboard_container" :class="{ scrolled: isScrollUp }" @touchstart="onTouchStart" @touchend="onTouchEnd">
       <section>
         <v-btn id="dashboard_scroll_button" @click="scrollToggle" block>
           <v-icon v-show="!isScrollUp">{{ fontAwesomeArrowUp }}</v-icon>
@@ -124,6 +126,15 @@ export default {
       isFilterVisible: false,
       isReviewsVisible: false,
 
+      vuetifyBuildingIcon: {
+        class: "mr-4",
+        color: "white",
+      },
+      vuetifyTabs: {
+        color: "white",
+        "hide-slider": true,
+        "slider-color": "white",
+      },
       vuetifyPagination: {
         color: "deep-orange",
         circle: true,
@@ -132,6 +143,7 @@ export default {
       vuetifyFilter: {
         color: "black",
       },
+      fontAwesomeBuilding: "fas fa-building",
       fontAwesomeArrowUp: "fa-solid fa-arrow-up",
       fontAwesomeArrowDown: "fa-solid fa-arrow-down",
       fontAwesomeBar: "fas fa-bars",
