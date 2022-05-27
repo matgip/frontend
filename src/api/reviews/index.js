@@ -101,7 +101,7 @@ class ReviewByLikeAPI extends NestedAPI {
       const userId = data.value.split(":")[1];
 
       const resp = await reviewApi.fetch(agencyId, userId);
-      reviewsByLike.unshift(createReview(resp, { userId, likes }));
+      reviewsByLike.push(createReview(resp, { userId, likes }));
     }
 
     return reviewsByLike;
@@ -129,7 +129,7 @@ class ReviewByTime extends NestedAPI {
     for (let data of response.data) {
       const userId = data.value.split(":")[1];
       const resp = await reviewApi.fetch(agencyId, userId);
-      reviewsByTime.unshift(createReview(resp, { userId }));
+      reviewsByTime.push(createReview(resp, { userId }));
     }
 
     return reviewsByTime;
