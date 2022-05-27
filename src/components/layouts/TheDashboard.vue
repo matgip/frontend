@@ -18,6 +18,9 @@
             <v-tab @click="onSearchByCenter()">
               근처 부동산
             </v-tab>
+            <v-tab @click="onRealTimeTop15Hits()">
+              실시간 인기 부동산
+            </v-tab>
             <v-tab>
               뉴스
             </v-tab>
@@ -89,6 +92,7 @@
 <script>
 import mergesort from "mergesort";
 import agencyApi from "@/api/agency";
+import agenciesTopHitsApi from "@/api/agenciesTopHits";
 
 import Search from "@/components/cards/SearchBar.vue";
 import Menu from "@/components/cards/MenuCard/Menu.vue";
@@ -204,6 +208,15 @@ export default {
         const { y, x } = this.map.getCenter();
         this.agencies = await agencyApi.searchByCenter(x, y);
         this.sorted = mergesort(this.comparator, await agencyApi.searchByCenter(x, y));
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
+    async onRealTimeTop15Hits() {
+      try {
+        const agenciesTopHits15 = await agenciesTopHitsApi.get();
+        console.log(agenciesTopHits15);
       } catch (err) {
         console.error(err);
       }
