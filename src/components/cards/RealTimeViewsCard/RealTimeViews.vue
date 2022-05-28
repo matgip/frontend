@@ -9,7 +9,7 @@
 
     <ul class="realtime_view_list" v-for="(agency, i) in agenciesTopHits" :key="i">
       <li class="realtime_view_list_item">
-        <div class="realtime_view_list_item_ranking">{{ i }}</div>
+        <div class="realtime_view_list_item_ranking">{{ i + 1 }}</div>
         <div class="realtime_view_list_item_agency_info">{{ agency.name }}</div>
         <div class="realtime_view_list_item_views">{{ agency.views }}명이 봤어요</div>
       </li>
