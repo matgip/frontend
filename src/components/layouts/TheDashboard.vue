@@ -14,11 +14,11 @@
 
         <!-- 하단 서치바 table -->
         <template v-slot:extension>
-          <v-tabs v-bind="vuetifyTabs">
+          <v-tabs v-bind="vuetifyTabs" v-model="selected">
             <v-tab @click="onSearchByCenter()">
               근처 부동산
             </v-tab>
-            <v-tab @click="onRealTimeTop15Hits()">
+            <v-tab @click="onFetchRealTimeViews()">
               실시간 인기 부동산
             </v-tab>
             <v-tab>
@@ -33,56 +33,66 @@
       <Menu @close-menu-card="onCloseMenu()" />
     </section>
 
-    <div id="dashboard_container" :class="{ scrolled: isScrollUp }" @touchstart="onTouchStart" @touchend="onTouchEnd">
+    <div id="dashboard_container" :class="{ scrolled: isScrollUp }">
       <section>
-        <v-btn id="dashboard_scroll_button" @click="scrollToggle" block>
+        <v-btn
+          id="dashboard_scroll_button"
+          @click="scrollToggle"
+          @touchstart="onTouchStart"
+          @touchend="onTouchEnd"
+          block
+        >
           <v-icon v-show="!isScrollUp">{{ fontAwesomeArrowUp }}</v-icon>
           <v-icon v-show="isScrollUp">{{ fontAwesomeArrowDown }}</v-icon>
         </v-btn>
 
-        <!-- 검색 결과 없음 -->
-        <div v-show="!agency.id && sorted.length === 0">
-          <NoContent />
-        </div>
-
-        <div v-if="isReviewsVisible">
-          <!-- 리뷰 -->
-          <Reviews @close-reviews-card="onCloseReviews()" />
-        </div>
-        <div v-else>
-          <!-- 선택된 부동산 -->
-          <Agency v-if="agency.id" :agency="agency" :key="agency.id" @open-reviews-card="onOpenReviews()" />
-
-          <!-- 주변 부동산 -->
-          <div v-if="sorted.length !== 0">
-            <div class="dashboard_agencies_title_container">
-              <h3 class="mr-14">근처 부동산</h3>
-              <img src="@/assets/images/filter.png" width="32" height="32" @click="onOpenFilter()" />
-              <div class="dashboard_agencies_filter" @click="onOpenFilter()">
-                필터
-              </div>
-            </div>
-
-            <div v-if="isFilterVisible">
-              <SearchFilter @close-filter-card="onCloseFilter()" @apply-filter="onApplyFilter" />
-            </div>
-
-            <template
-              v-for="agency in sorted.slice(
-                (agencyPage - 1) * MAX_AGENCIES_PER_PAGE,
-                agencyPage * MAX_AGENCIES_PER_PAGE
-              )"
-            >
-              <Agency :agency="agency" :key="agency.id" @open-reviews-card="onOpenReviews()" />
-            </template>
-
-            <v-pagination
-              v-bind="vuetifyPagination"
-              v-model="agencyPage"
-              :length="agencyPageCount"
-              :total-visible="5"
-            />
+        <div v-if="selected === 0">
+          <!-- 검색 결과 없음 -->
+          <div v-if="!agency.id && sorted.length === 0">
+            <NoContent />
           </div>
+          <!-- 리뷰 -->
+          <div v-else-if="isReviewsVisible">
+            <Reviews @close-reviews-card="onCloseReviews()" />
+          </div>
+          <div v-else>
+            <!-- 선택된 부동산 -->
+            <Agency v-if="agency.id" :agency="agency" :key="agency.id" @open-reviews-card="onOpenReviews()" />
+
+            <!-- 주변 부동산 -->
+            <div v-if="sorted.length !== 0">
+              <div class="dashboard_agencies_title_container">
+                <h3 class="mr-14">근처 부동산</h3>
+                <img src="@/assets/images/filter.png" width="32" height="32" @click="onOpenFilter()" />
+                <div class="dashboard_agencies_filter" @click="onOpenFilter()">
+                  필터
+                </div>
+              </div>
+
+              <div v-if="isFilterVisible">
+                <SearchFilter @close-filter-card="onCloseFilter()" @apply-filter="onApplyFilter" />
+              </div>
+
+              <template
+                v-for="agency in sorted.slice(
+                  (agencyPage - 1) * MAX_AGENCIES_PER_PAGE,
+                  agencyPage * MAX_AGENCIES_PER_PAGE
+                )"
+              >
+                <Agency :agency="agency" :key="agency.id" @open-reviews-card="onOpenReviews()" />
+              </template>
+
+              <v-pagination
+                v-bind="vuetifyPagination"
+                v-model="agencyPage"
+                :length="agencyPageCount"
+                :total-visible="5"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="selected === 1">
+          <RealTimeViews :agenciesTopHits="agenciesTopHits" />
         </div>
       </section>
     </div>
@@ -100,6 +110,7 @@ import Agency from "@/components/cards/AgencyCard/AgencyCard.vue";
 import NoContent from "@/components/cards/NoContentCard/NoContent.vue";
 import Reviews from "@/components/cards/ReviewsCard/Reviews.vue";
 import SearchFilter from "@/components/cards/SearchFilterCard/SearchFilter.vue";
+import RealTimeViews from "@/components/cards/RealTimeViewsCard/RealTimeViews.vue";
 
 import { mapGetters } from "vuex";
 
@@ -111,12 +122,14 @@ export default {
     NoContent,
     Reviews,
     SearchFilter,
+    RealTimeViews,
   },
 
   data() {
     return {
       agencyPage: 1,
       agencies: [],
+      agenciesTopHits: [],
       sorted: [],
       comparator: this.$_orderByStars,
       MAX_AGENCIES_PER_PAGE: 4,
@@ -125,10 +138,11 @@ export default {
       endY: 0,
 
       isScrollUp: false,
-
       isMenuVisible: false,
       isFilterVisible: false,
       isReviewsVisible: false,
+
+      selected: 0,
 
       vuetifyBuildingIcon: {
         class: "mr-4",
@@ -213,10 +227,9 @@ export default {
       }
     },
 
-    async onRealTimeTop15Hits() {
+    async onFetchRealTimeViews() {
       try {
-        const agenciesTopHits15 = await agenciesTopHitsApi.get();
-        console.log(agenciesTopHits15);
+        this.agenciesTopHits = await agenciesTopHitsApi.get();
       } catch (err) {
         console.error(err);
       }
