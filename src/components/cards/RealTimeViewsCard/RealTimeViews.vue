@@ -76,7 +76,7 @@ export default {
   font-weight: bold;
 
   margin-right: 12px;
-  width: 70px;
+  width: 20px;
 }
 
 .realtime_view_list_item_agency_info {
@@ -103,7 +103,7 @@ export default {
 
   color: gray;
 
-  padding-left: 82px;
+  padding-left: 32px;
 }
 
 .divider {
