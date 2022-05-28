@@ -13,6 +13,9 @@
         <div class="realtime_view_list_item_agency_info">{{ agency.name }}</div>
         <div class="realtime_view_list_item_views">{{ agency.views }}명이 봤어요</div>
       </li>
+      <li class="realtime_view_list_item">
+        <div class="realtime_view_list_item_address_name">{{ agency.address_name }}</div>
+      </li>
     </ul>
   </div>
 </template>
@@ -90,6 +93,15 @@ export default {
   padding-left: 6px;
   padding-right: 10px;
   text-align: right;
+}
+
+.realtime_view_list_item_address_name {
+  display: table-cell;
+  font-size: 12px;
+
+  color: gray;
+
+  padding-left: 82px;
 }
 
 .divider {
