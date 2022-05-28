@@ -2,7 +2,9 @@
   <div id="realtime_views_container">
     <header>
       <h3>실시간 인기 부동산</h3>
-      <div class="realtime_views_basetime">기준</div>
+      <div v-if="agenciesTopHits.length !== 0" class="realtime_views_basetime">
+        {{ agenciesTopHits[0].baseTime }} 기준
+      </div>
     </header>
 
     <div class="divider"></div>
