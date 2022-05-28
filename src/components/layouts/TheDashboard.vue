@@ -190,6 +190,10 @@ export default {
     sorted: function() {
       if (this.sorted.length !== 0) this.scrollUp();
     },
+
+    agenciesTopHits: function() {
+      if (this.agenciesTopHits.length !== 0) this.scrollUp();
+    },
   },
 
   methods: {
