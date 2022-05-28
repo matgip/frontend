@@ -114,6 +114,16 @@ export default {
     sorted: function() {
       if (this.sorted.length !== 0) this.$emit("scroll-up");
     },
+
+    center: async function() {
+      try {
+        const { y, x } = this.center;
+        this.agencies = await agencyApi.searchByCenter(x, y);
+        this.sorted = mergesort(this.comparator, await agencyApi.searchByCenter(x, y));
+      } catch (err) {
+        console.error(err);
+      }
+    },
   },
 
   methods: {
@@ -126,7 +136,7 @@ export default {
       return sumOfViews;
     },
     $_calDistFromCenter(agency) {
-      const { y, x } = this.map.getCenter();
+      const { y, x } = this.center;
       const distX = Math.abs(y - agency.y) ** 2;
       const distY = Math.abs(x - agency.x) ** 2;
       return distX + distY;
