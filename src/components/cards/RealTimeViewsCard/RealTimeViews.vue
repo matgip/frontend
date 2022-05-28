@@ -2,6 +2,7 @@
   <div id="realtime_views_container">
     <header>
       <h3>실시간 인기 부동산</h3>
+      <div class="realtime_views_basetime">기준</div>
     </header>
 
     <div class="divider"></div>
@@ -44,6 +45,12 @@ export default {
   padding-top: 12px;
 }
 
+.realtime_views_basetime {
+  padding-top: 6px;
+
+  font-size: 12px;
+}
+
 .realtime_view_list {
   display: table;
   width: 100%;
@@ -64,7 +71,7 @@ export default {
   font-weight: bold;
 
   margin-right: 12px;
-  width: 98px;
+  width: 70px;
 }
 
 .realtime_view_list_item_agency_info {
