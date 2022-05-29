@@ -18,11 +18,6 @@ export default Promise.all(routes).then((routes) => {
   return new VueRouter({
     mode: "history",
     base: process.env.BASE_URL,
-    scrollBehavior(to, from, savedPosition) {
-      if (from.path === to.path) return;
-      console.log("from: ", from, "to: ", to, "savedPosition: ", savedPosition);
-      return { x: 0, y: 0 };
-    },
     routes,
   });
 });

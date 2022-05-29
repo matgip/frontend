@@ -61,6 +61,15 @@ class AgencyAPI extends ModeAPI {
       this.handleError(err);
     }
   }
+
+  async getTopHits() {
+    try {
+      const resp = await this.api.get(this.getUrl("realtime_agencies_views" + "?range=0~14"));
+      return resp.data;
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
 }
 
 export default new AgencyAPI("agency");

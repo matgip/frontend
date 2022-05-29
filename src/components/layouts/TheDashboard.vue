@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import agenciesTopHitsApi from "@/api/agenciesTopHits";
+import agencyApi from "@/api/agency";
 
 import Search from "@/components/cards/SearchBar.vue";
 import Menu from "@/components/cards/MenuCard/Menu.vue";
@@ -126,7 +126,7 @@ export default {
 
     async onFetchRealTimeViews() {
       try {
-        this.agenciesTopHits = await agenciesTopHitsApi.get();
+        this.agenciesTopHits = await agencyApi.getTopHits();
       } catch (err) {
         console.error(err);
       }
