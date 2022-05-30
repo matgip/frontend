@@ -1,7 +1,7 @@
 <template>
   <div>
     <section>
-      <v-toolbar class="deep-orange">
+      <v-toolbar class="deep-orange" rounded>
         <v-icon v-bind="vuetifyBuildingIcon">{{ fontAwesomeBuilding }}</v-icon>
 
         <!-- 서치바 -->
@@ -21,7 +21,7 @@
             <v-tab @click="onFetchRealTimeViews()">
               실시간 인기 부동산
             </v-tab>
-            <v-tab>
+            <v-tab @click="onFetchNews()">
               뉴스
             </v-tab>
           </v-tabs>
@@ -46,11 +46,17 @@
           <v-icon v-show="isScrollUp">{{ fontAwesomeArrowDown }}</v-icon>
         </v-btn>
 
+        <!-- 부동산 -->
         <div v-if="selected === 0">
           <Agency :center="mapCenter" @scroll-up="scrollUp()" />
         </div>
+        <!-- 실시간 인기 부동산 TOP 15 -->
         <div v-if="selected === 1">
           <RealTimeViews :agenciesTopHits="agenciesTopHits" />
+        </div>
+        <!-- 부동산 관련 뉴스 -->
+        <div v-if="selected === 2">
+          <News :news="news" />
         </div>
       </section>
     </div>
@@ -59,11 +65,13 @@
 
 <script>
 import agencyApi from "@/api/agency";
+import { newsApi } from "@/api/news";
 
 import Search from "@/components/cards/SearchBar.vue";
 import Menu from "@/components/cards/MenuCard/Menu.vue";
 import Agency from "@/components/cards/AgencyCard/Agency.vue";
 import RealTimeViews from "@/components/cards/RealTimeViewsCard/RealTimeViews.vue";
+import News from "@/components/cards/NewsCard/News.vue";
 
 import { mapGetters } from "vuex";
 
@@ -73,12 +81,14 @@ export default {
     Menu,
     Agency,
     RealTimeViews,
+    News,
   },
 
   data() {
     return {
       mapCenter: {},
       agenciesTopHits: [],
+      news: [],
       // Touch move
       startY: 0,
       endY: 0,
@@ -117,6 +127,9 @@ export default {
     agenciesTopHits: function() {
       if (this.agenciesTopHits.length !== 0) this.scrollUp();
     },
+    news: function() {
+      if (this.news.length !== 0) this.scrollUp();
+    },
   },
 
   methods: {
@@ -132,6 +145,18 @@ export default {
       }
     },
 
+    async onFetchNews() {
+      try {
+        const resp = await newsApi.get({
+          keyword: "부동산 규제",
+          size: 10,
+        });
+        this.news = resp.items;
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
     onTouchStart(e) {
       this.startY = e.touches[0].clientY;
     },
@@ -142,7 +167,6 @@ export default {
       if (this.startY - this.endY <= -150) this.isScrollUp = false;
     },
 
-    // Scroll
     scrollToggle() {
       this.isScrollUp = !this.isScrollUp;
     },
