@@ -19,10 +19,13 @@
               근처 부동산
             </v-tab>
             <v-tab>
-              실시간 인기 부동산
+              실시간 인기
             </v-tab>
             <v-tab>
               뉴스
+            </v-tab>
+            <v-tab>
+              자유 게시판
             </v-tab>
           </v-tabs>
         </template>
@@ -102,6 +105,7 @@ export default {
         color: "white",
         "hide-slider": true,
         "slider-color": "white",
+        "show-arrows": true,
       },
       vuetifyFilter: {
         color: "black",
