@@ -54,7 +54,7 @@ export default {
       this.investmentSentimentalNews = investmentSentimentalNews.items;
       this.regulationNews = regulationNews.items;
       this.priceNews = priceNews.items;
-      this.news = this.regulationNews;
+      this.news = this.investmentSentimentalNews;
     } catch (err) {
       console.error(err);
     }

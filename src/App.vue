@@ -54,7 +54,7 @@ export default {
   font-family: "GmarketSansTTF", sans-serif !important;
 }
 
-/* 엘리스 Font */
+/* Fonts */
 @font-face {
   font-family: "EliceDigitalCoding";
   src: url("assets/fonts/EliceDigitalCoding_Bold.ttf") format("truetype");
