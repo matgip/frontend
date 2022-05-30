@@ -51,7 +51,7 @@ export default {
 }
 
 .v-application {
-  font-family: "locus_sangsang", sans-serif !important;
+  font-family: "GmarketSansTTF", sans-serif !important;
 }
 
 /* 엘리스 Font */
@@ -76,6 +76,24 @@ export default {
 @font-face {
   font-family: "locus_sangsang";
   src: url("assets/fonts/locus_sangsang.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "GmarketSansTTF";
+  src: url("assets/fonts/GmarketSansTTFBold.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "GmarketSansTTF";
+  src: url("assets/fonts/GmarketSansTTFLight.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "GmarketSansTTF";
+  src: url("assets/fonts/GmarketSansTTFMedium.ttf") format("truetype");
   font-weight: 200;
 }
 </style>
