@@ -82,18 +82,18 @@ export default {
 @font-face {
   font-family: "GmarketSansTTF";
   src: url("assets/fonts/GmarketSansTTFBold.ttf") format("truetype");
-  font-weight: 200;
+  font-weight: 180;
 }
 
 @font-face {
   font-family: "GmarketSansTTF";
   src: url("assets/fonts/GmarketSansTTFLight.ttf") format("truetype");
-  font-weight: 200;
+  font-weight: 180;
 }
 
 @font-face {
   font-family: "GmarketSansTTF";
   src: url("assets/fonts/GmarketSansTTFMedium.ttf") format("truetype");
-  font-weight: 200;
+  font-weight: 180;
 }
 </style>
