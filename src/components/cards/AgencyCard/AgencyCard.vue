@@ -26,9 +26,9 @@
       </div>
       <!-- 부동산 정보(조회수, 위치, 전화번호) -->
       <div class="agency_info_container">
-        <p>
+        <!-- <p>
           <v-icon v-bind="vuetifyIcon">{{ fontAwesomeEyes }}</v-icon> {{ views }} 명이 조회함
-        </p>
+        </p> -->
         <p>
           <v-icon v-bind="vuetifyIcon">{{ fontAwesomeMarker }}</v-icon> {{ agency.address_name }}
         </p>
@@ -148,6 +148,7 @@ export default {
 
 .agency_title_container {
   margin: 4px 8px;
+  color: black;
 }
 
 .agency_rating_container {
@@ -160,6 +161,7 @@ export default {
   margin: 8px 8px;
 
   font-size: 12px;
+  color: black;
 }
 
 .agency_review_button_container {
