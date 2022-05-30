@@ -8,10 +8,13 @@
 
     <v-tabs color="deep-orange" v-model="selected">
       <v-tab>
-        규제
+        투자심리
       </v-tab>
       <v-tab>
         실거래가
+      </v-tab>
+      <v-tab>
+        규제
       </v-tab>
     </v-tabs>
 
@@ -36,6 +39,10 @@ import { newsApi } from "@/api/news";
 export default {
   async mounted() {
     try {
+      const investmentSentimentalNews = await newsApi.get({
+        keyword: "부동산 투자심리",
+        size: 10,
+      });
       const regulationNews = await newsApi.get({
         keyword: "부동산 규제",
         size: 10,
@@ -44,6 +51,7 @@ export default {
         keyword: "부동산 실거래가",
         size: 10,
       });
+      this.investmentSentimentalNews = investmentSentimentalNews.items;
       this.regulationNews = regulationNews.items;
       this.priceNews = priceNews.items;
       this.news = this.regulationNews;
@@ -56,6 +64,7 @@ export default {
     return {
       selected: -1,
       news: [],
+      investmentSentimentalNews: [],
       priceNews: [],
       regulationNews: [],
     };
@@ -65,16 +74,18 @@ export default {
     selected(val) {
       switch (val) {
         case 0:
-          this.news = this.regulationNews;
+          this.news = this.investmentSentimentalNews;
           break;
         case 1:
           this.news = this.priceNews;
           break;
+        case 2:
+          this.news = this.regulationNews;
       }
     },
 
     regulationNews: function() {
-      if (this.regulationNews.length !== 0) this.$emit("scroll-up");
+      if (this.investmentSentimentalNews.length !== 0) this.$emit("scroll-up");
     },
   },
 
