@@ -26,7 +26,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style>
 .main_dashboard_container {
   position: absolute;
   z-index: 20;
@@ -48,5 +48,34 @@ export default {
   .main_router_container {
     margin-left: 0;
   }
+}
+
+.v-application {
+  font-family: "locus_sangsang", sans-serif !important;
+}
+
+/* 엘리스 Font */
+@font-face {
+  font-family: "EliceDigitalCoding";
+  src: url("assets/fonts/EliceDigitalCoding_Bold.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "EliceDigitalCoding";
+  src: url("assets/fonts/EliceDigitalCoding_Regular.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "NanumBarunGothic";
+  src: url("assets/fonts/NanumBarunGothic-YetHangul.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "locus_sangsang";
+  src: url("assets/fonts/locus_sangsang.ttf") format("truetype");
+  font-weight: 200;
 }
 </style>
