@@ -196,7 +196,7 @@ div.user_info_container {
 
 @media screen and (max-width: 768px) {
   .menu_container {
-    width: 380px;
+    width: 90%;
   }
 
   .dimmed_layer_login_container {

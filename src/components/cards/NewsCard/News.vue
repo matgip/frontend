@@ -84,8 +84,8 @@ export default {
       }
     },
 
-    regulationNews: function() {
-      if (this.investmentSentimentalNews.length !== 0) this.$emit("scroll-up");
+    investmentSentimentalNews: function() {
+      if (this.investmentSentimentalNews.length !== 0) this.$emit("on-upload-complete");
     },
   },
 

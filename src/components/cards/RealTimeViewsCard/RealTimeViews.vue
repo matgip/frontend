@@ -42,7 +42,7 @@ export default {
 
   watch: {
     agenciesTopHits: function() {
-      if (this.agenciesTopHits.length !== 0) this.$emit("scroll-up");
+      if (this.agenciesTopHits.length !== 0) this.$emit("on-upload-complete");
     },
   },
 };

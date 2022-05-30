@@ -112,7 +112,7 @@ export default {
     },
 
     sorted: function() {
-      if (this.sorted.length !== 0) this.$emit("scroll-up");
+      if (this.sorted.length !== 0) this.$emit("on-upload-complete");
     },
 
     center: async function() {
