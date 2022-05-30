@@ -17,7 +17,7 @@
 
     <div v-for="n in news" :key="n.title">
       <div class="news_item">
-        <a :href="n.link" class="link">
+        <a :href="n.link" target="_blank" class="link">
           <h5 class="title">{{ n.title | strippedContent }}</h5>
         </a>
         <div class="news_summary_container">
