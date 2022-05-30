@@ -6,7 +6,16 @@
 
     <div class="divider" />
 
-    <div v-for="(n, i) in news" :key="i">
+    <v-tabs color="deep-orange" v-model="selected">
+      <v-tab>
+        규제
+      </v-tab>
+      <v-tab>
+        실거래가
+      </v-tab>
+    </v-tabs>
+
+    <div v-for="n in news" :key="n.title">
       <div class="news_item">
         <a :href="n.link" class="link">
           <h5 class="title">{{ n.title | strippedContent }}</h5>
@@ -20,11 +29,50 @@
 </template>
 
 <script>
+import { newsApi } from "@/api/news";
+
 export default {
-  props: {
-    news: {
-      type: Array,
-      required: true,
+  async mounted() {
+    try {
+      const regulationNews = await newsApi.get({
+        keyword: "부동산 규제",
+        size: 10,
+      });
+      const priceNews = await newsApi.get({
+        keyword: "부동산 실거래가",
+        size: 10,
+      });
+      this.regulationNews = regulationNews.items;
+      this.priceNews = priceNews.items;
+      this.news = this.regulationNews;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
+  data() {
+    return {
+      selected: -1,
+      news: [],
+      priceNews: [],
+      regulationNews: [],
+    };
+  },
+
+  watch: {
+    selected(val) {
+      switch (val) {
+        case 0:
+          this.news = this.regulationNews;
+          break;
+        case 1:
+          this.news = this.priceNews;
+          break;
+      }
+    },
+
+    regulationNews: function() {
+      if (this.regulationNews.length !== 0) this.$emit("scroll-up");
     },
   },
 

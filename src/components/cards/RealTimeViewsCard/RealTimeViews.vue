@@ -23,11 +23,26 @@
 </template>
 
 <script>
+import agencyApi from "@/api/agency";
+
 export default {
-  props: {
-    agenciesTopHits: {
-      type: Array,
-      required: true,
+  async mounted() {
+    try {
+      this.agenciesTopHits = await agencyApi.getTopHits();
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
+  data() {
+    return {
+      agenciesTopHits: [],
+    };
+  },
+
+  watch: {
+    agenciesTopHits: function() {
+      if (this.agenciesTopHits.length !== 0) this.$emit("scroll-up");
     },
   },
 };

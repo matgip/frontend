@@ -18,10 +18,10 @@
             <v-tab @click="onSearchByCenter()">
               근처 부동산
             </v-tab>
-            <v-tab @click="onFetchRealTimeViews()">
+            <v-tab>
               실시간 인기 부동산
             </v-tab>
-            <v-tab @click="onFetchNews()">
+            <v-tab>
               뉴스
             </v-tab>
           </v-tabs>
@@ -52,11 +52,11 @@
         </div>
         <!-- 실시간 인기 부동산 TOP 15 -->
         <div v-if="selected === 1">
-          <RealTimeViews :agenciesTopHits="agenciesTopHits" />
+          <RealTimeViews @scroll-up="scrollUp()" />
         </div>
         <!-- 부동산 관련 뉴스 -->
         <div v-if="selected === 2">
-          <News :news="news" />
+          <News @scroll-up="scrollUp()" />
         </div>
       </section>
     </div>
@@ -64,9 +64,6 @@
 </template>
 
 <script>
-import agencyApi from "@/api/agency";
-import { newsApi } from "@/api/news";
-
 import Search from "@/components/cards/SearchBar.vue";
 import Menu from "@/components/cards/MenuCard/Menu.vue";
 import Agency from "@/components/cards/AgencyCard/Agency.vue";
@@ -87,8 +84,7 @@ export default {
   data() {
     return {
       mapCenter: {},
-      agenciesTopHits: [],
-      news: [],
+
       // Touch move
       startY: 0,
       endY: 0,
@@ -123,38 +119,9 @@ export default {
     }),
   },
 
-  watch: {
-    agenciesTopHits: function() {
-      if (this.agenciesTopHits.length !== 0) this.scrollUp();
-    },
-    news: function() {
-      if (this.news.length !== 0) this.scrollUp();
-    },
-  },
-
   methods: {
     async onSearchByCenter() {
       this.mapCenter = this.map.getCenter();
-    },
-
-    async onFetchRealTimeViews() {
-      try {
-        this.agenciesTopHits = await agencyApi.getTopHits();
-      } catch (err) {
-        console.error(err);
-      }
-    },
-
-    async onFetchNews() {
-      try {
-        const resp = await newsApi.get({
-          keyword: "부동산 규제",
-          size: 10,
-        });
-        this.news = resp.items;
-      } catch (err) {
-        console.error(err);
-      }
     },
 
     onTouchStart(e) {
