@@ -19,6 +19,8 @@
       <div class="news_item">
         <a :href="n.link" target="_blank" class="link">
           <h5 class="title">{{ n.title | strippedContent }}</h5>
+          <span> - </span>
+          <span> {{ n.pubDate | diffTime }} </span>
         </a>
         <div class="news_summary_container">
           <p class="news_summary">{{ n.description | strippedContent }}</p>
@@ -77,6 +79,28 @@ export default {
   },
 
   filters: {
+    diffTime: function(publised) {
+      const oneMinute = 60 * 1000;
+      const oneHour = oneMinute * 60;
+      const oneDay = oneHour * 24;
+
+      const pubDate = new Date(publised);
+      const current = new Date();
+      const diff = current.getTime() - pubDate.getTime();
+      if (diff < oneMinute) {
+        return "몇 초전";
+      } else if (diff < oneHour) {
+        const passedMinutes = Math.floor(diff / oneMinute);
+        return `${passedMinutes} 분전`;
+      } else if (diff < oneDay) {
+        const passedHours = Math.floor(diff / oneHour);
+        return `${passedHours} 시간 전`;
+      } else {
+        const passedDays = Math.floor(diff / oneDay);
+        return `${passedDays} 일 전`;
+      }
+    },
+
     strippedContent: function(string) {
       return string.replace(/<\/?[^>]+>/gi, " ").replace(/&quot;/g, '"');
     },
@@ -114,6 +138,11 @@ export default {
 
 a {
   text-decoration: none;
+}
+
+span {
+  font-size: 12px;
+  color: gray;
 }
 
 .news_item .title {
