@@ -53,9 +53,9 @@ class AgencyAPI extends ModeAPI {
     }
   }
 
-  async increaseLikes(agencyId, likeEntity) {
+  async updateLikes(agencyId, likesEntity) {
     try {
-      const resp = await this.api.put(this.getUrl(agencyId) + "/likes", likeEntity);
+      const resp = await this.api.put(this.getUrl(agencyId) + "/likes", likesEntity);
       return resp.data;
     } catch (err) {
       this.handleError(err);

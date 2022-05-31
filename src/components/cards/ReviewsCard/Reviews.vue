@@ -108,7 +108,15 @@ export default {
       color: "black",
     },
 
-    vuetifyButton: {
+    vuetifyButton: {},
+    buttonLiked: {
+      color: "deep-orange",
+      outlined: false,
+      rounded: true,
+      small: true,
+      class: "mr-2",
+    },
+    buttonUnliked: {
       color: "deep-orange",
       outlined: true,
       rounded: true,
@@ -149,10 +157,13 @@ export default {
   async mounted() {
     try {
       await this.fetch();
+
       if (await agencyApi.getLikes(this.agency.id, this.user.id)) {
-        // TODO: Invert Like button color
-        console.log("ALREADY LIKE");
+        this.vuetifyButton = this.buttonLiked;
+      } else {
+        this.vuetifyButton = this.buttonUnliked;
       }
+
       this.$store.subscribe(async (mutation) => {
         if (mutation.type === "UPDATE_AGENCY") {
           this.clear();
@@ -175,13 +186,13 @@ export default {
 
     async onLikeAgency() {
       try {
-        const resp = await agencyApi.increaseLikes(this.agency.id, { user_id: this.user.id });
-        console.log(resp);
-        if (resp.result === "already-added") {
-          alert("이미 좋아요를 누르셨습니다.");
-          return;
-        }
-        if (resp.result === "success") {
+        if (await agencyApi.getLikes(this.agency.id, this.user.id)) {
+          await agencyApi.updateLikes(this.agency.id, { userId: this.user.id, operation: "decrease" });
+          this.vuetifyButton = this.buttonUnliked;
+          alert("'좋아요'를 취소했어요.");
+        } else {
+          await agencyApi.updateLikes(this.agency.id, { userId: this.user.id, operation: "increase" });
+          this.vuetifyButton = this.buttonLiked;
           alert("이 부동산을 좋아합니다.");
         }
       } catch (err) {
