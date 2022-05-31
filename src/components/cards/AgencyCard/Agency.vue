@@ -133,30 +133,6 @@ export default {
   },
 
   methods: {
-    $_sumOfViews(agency) {
-      if (agency.views === null || Object.keys(agency.views) === 0) return 0;
-      let sumOfViews = 0;
-      for (const view of Object.values(agency.views)) {
-        sumOfViews += parseInt(view);
-      }
-      return sumOfViews;
-    },
-    $_calDistFromCenter(agency) {
-      const { y, x } = this.center;
-      const distX = Math.abs(y - agency.y) ** 2;
-      const distY = Math.abs(x - agency.x) ** 2;
-      return distX + distY;
-    },
-    $_orderByViews(a, b) {
-      return this.$_sumOfViews(a) < this.$_sumOfViews(b);
-    },
-    $_orderByStars(a, b) {
-      return a.stars < b.stars;
-    },
-    $_orderByDistance(a, b) {
-      return this.$_calDistFromCenter(a) > this.$_calDistFromCenter(b);
-    },
-
     async onApplyFilter(filter) {
       switch (filter) {
         case "orderByViews":
@@ -173,7 +149,6 @@ export default {
       this.isFilterVisible = false;
       this.agencyPage = 1;
     },
-
     onOpenFilter() {
       this.isFilterVisible = true;
     },
@@ -185,6 +160,30 @@ export default {
     },
     onCloseReviews() {
       this.isReviewsVisible = false;
+    },
+
+    $_orderByViews(a, b) {
+      return this.$_sumOfViews(a) < this.$_sumOfViews(b);
+    },
+    $_sumOfViews(agency) {
+      if (agency.views === null || Object.keys(agency.views) === 0) return 0;
+      let sumOfViews = 0;
+      for (const view of Object.values(agency.views)) {
+        sumOfViews += parseInt(view);
+      }
+      return sumOfViews;
+    },
+    $_orderByStars(a, b) {
+      return a.stars < b.stars;
+    },
+    $_orderByDistance(a, b) {
+      return this.$_calDistFromCenter(a) > this.$_calDistFromCenter(b);
+    },
+    $_calDistFromCenter(agency) {
+      const { y, x } = this.center;
+      const distX = Math.abs(y - agency.y) ** 2;
+      const distY = Math.abs(x - agency.x) ** 2;
+      return distX + distY;
     },
   },
 };

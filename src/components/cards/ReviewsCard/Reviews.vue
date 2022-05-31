@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import agencyApi from "@/api/agency";
+
 import BaseBarGraph from "@/common/BaseBarGraph.vue";
 import BaseButton from "@/common/BaseButton.vue";
 
@@ -145,14 +147,21 @@ export default {
   },
 
   async mounted() {
-    await this.fetch();
-
-    this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "UPDATE_AGENCY") {
-        this.clear();
-        await this.fetch();
+    try {
+      await this.fetch();
+      if (await agencyApi.getLikes(this.agency.id, this.user.id)) {
+        // TODO: Invert Like button color
+        console.log("ALREADY LIKE");
       }
-    });
+      this.$store.subscribe(async (mutation) => {
+        if (mutation.type === "UPDATE_AGENCY") {
+          this.clear();
+          await this.fetch();
+        }
+      });
+    } catch (err) {
+      console.error(err);
+    }
   },
 
   destroyed() {
@@ -166,12 +175,13 @@ export default {
 
     async onLikeAgency() {
       try {
-        const resp = await this.$api.likes.put(this.agency.id, { user_id: this.user.id });
-        if (resp.data.result === "already-added") {
+        const resp = await agencyApi.increaseLikes(this.agency.id, { user_id: this.user.id });
+        console.log(resp);
+        if (resp.result === "already-added") {
           alert("이미 좋아요를 누르셨습니다.");
           return;
         }
-        if (resp.data.result === "success") {
+        if (resp.result === "success") {
           alert("이 부동산을 좋아합니다.");
         }
       } catch (err) {
@@ -182,7 +192,6 @@ export default {
     async onLikeReview(userId) {
       try {
         const response = await reviewLikeApi.add(this.agency.id, userId, this.user.id);
-        console.log(response);
         if (response.result === "already-added") {
           alert("이미 이 리뷰를 좋아합니다.");
           return;

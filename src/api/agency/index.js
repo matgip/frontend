@@ -53,9 +53,31 @@ class AgencyAPI extends ModeAPI {
     }
   }
 
+  async increaseLikes(agencyId, likeEntity) {
+    try {
+      const resp = await this.api.put(this.getUrl(agencyId) + "/likes", likeEntity);
+      return resp.data;
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
   async getViews(agencyId) {
     try {
       const resp = await this.api.get(this.getUrl(agencyId) + "/views");
+      return resp.data;
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
+  async getLikes(agencyId, userId) {
+    try {
+      const resp = await this.api.get(this.getUrl(agencyId) + "/likes", {
+        params: {
+          userId: userId,
+        },
+      });
       return resp.data;
     } catch (err) {
       this.handleError(err);
