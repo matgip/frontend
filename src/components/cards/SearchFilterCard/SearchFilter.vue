@@ -31,9 +31,9 @@ export default {
         title: "정렬 필터",
         select: null,
         items: [
-          { value: "orderByViews", text: "조회수" },
-          { value: "orderByRating", text: "평점순" },
-          { value: "orderByDistance", text: "가까운 거리순" },
+          { value: "orderByLikes", text: "좋아요 순" },
+          { value: "orderByRating", text: "별점 높은 순" },
+          { value: "orderByDistance", text: "가까운 순" },
         ],
       },
 

@@ -135,8 +135,8 @@ export default {
   methods: {
     async onApplyFilter(filter) {
       switch (filter) {
-        case "orderByViews":
-          this.comparator = this.$_orderByViews;
+        case "orderByLikes":
+          this.comparator = this.$_orderByLikes;
           break;
         case "orderByRating":
           this.comparator = this.$_orderByStars;
@@ -162,16 +162,8 @@ export default {
       this.isReviewsVisible = false;
     },
 
-    $_orderByViews(a, b) {
-      return this.$_sumOfViews(a) < this.$_sumOfViews(b);
-    },
-    $_sumOfViews(agency) {
-      if (agency.views === null || Object.keys(agency.views) === 0) return 0;
-      let sumOfViews = 0;
-      for (const view of Object.values(agency.views)) {
-        sumOfViews += parseInt(view);
-      }
-      return sumOfViews;
+    $_orderByLikes(a, b) {
+      return a.likes < b.likes;
     },
     $_orderByStars(a, b) {
       return a.stars < b.stars;
