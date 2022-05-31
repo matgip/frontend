@@ -33,11 +33,11 @@
     </div>
     <!-- 지역별 TOP -->
     <div v-if="selected === 1">
-      <ul class="realtime_view_list" v-for="(area, i) in areaTopHits" :key="i">
+      <ul class="realtime_view_list" v-for="(item, i) in areaTopHits" :key="i">
         <li class="realtime_view_list_item">
           <div class="realtime_view_list_item_ranking">{{ i + 1 }}</div>
-          <div class="realtime_view_list_item_agency_info">{{ area[0] }}</div>
-          <div class="realtime_view_list_item_views">{{ area[1] }}명이 봤어요</div>
+          <div class="realtime_view_list_item_agency_info">{{ item.area }}</div>
+          <div class="realtime_view_list_item_views">{{ item.views }}명이 봤어요</div>
         </li>
       </ul>
     </div>
@@ -51,7 +51,7 @@ export default {
   async mounted() {
     try {
       this.agenciesTopHits = await agencyApi.getTopHitAgency();
-      this.areaTopHits = this.constructTopAreaArray();
+      this.areaTopHits = await agencyApi.getTopHitArea();
     } catch (err) {
       console.error(err);
     }
@@ -69,30 +69,6 @@ export default {
   watch: {
     agenciesTopHits: function() {
       if (this.agenciesTopHits.length !== 0) this.$emit("on-upload-complete");
-    },
-  },
-
-  methods: {
-    constructTopAreaArray() {
-      let tempArea = {};
-      let sortable = [];
-      // convert array to object by area
-      for (let agency of this.agenciesTopHits) {
-        tempArea[this.getArea(agency.address_name)] ??= 0;
-        tempArea[this.getArea(agency.address_name)] += 1;
-      }
-      // revert to array for sorting
-      for (let area in tempArea) {
-        sortable.push([area, tempArea[area]]);
-      }
-      sortable.sort((a, b) => {
-        return b[1] - a[1];
-      });
-      return sortable;
-    },
-    getArea(addressName) {
-      const split = addressName.split(" ");
-      return split.slice(0, split.length - 2).join(" ");
     },
   },
 };

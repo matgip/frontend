@@ -36,7 +36,12 @@ const agencyStore = {
         console.log("empty agency response...");
         return;
       }
-      if (user.userId !== null) await agencyApi.increaseViews(agencyId, { agencyId: agencyId, user: user });
+      if (user.userId !== null)
+        await agencyApi.increaseViews(agencyId, {
+          agencyId: agencyId,
+          user: user,
+          addressName: response.data.address_name,
+        });
       response.data.views = await agencyApi.getViews(agencyId);
       commit(UPDATE_AGENCY, response.data);
     },
