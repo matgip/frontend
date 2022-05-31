@@ -1,13 +1,12 @@
 <template>
   <div id="agency_card">
-    <span>
-      <!-- 부동산 이미지 -->
+    <!-- <span>
       <v-carousel v-bind="vuetifyCarousel" style="width: 140px; height: 168px;">
         <v-carousel-item v-for="i in images" :key="i" v-bind="vuetifyCarouselItem">
           <img :src="getImgUrl(agency.id, i)" style="width: 140px; height: 168px;" />
         </v-carousel-item>
       </v-carousel>
-    </span>
+    </span> -->
 
     <span>
       <div class="agency_title_container">
@@ -70,14 +69,14 @@ export default {
   data: () => ({
     views: 0,
     images: [1, 2, 3, 4, 5, 6],
-    vuetifyCarousel: {
-      "hide-delimiters": true,
-      "show-arrows-on-hover": true,
-    },
-    vuetifyCarouselItem: {
-      transition: "fade-transition",
-      "reverse-transition": "fade-transition",
-    },
+    // vuetifyCarousel: {
+    //   "hide-delimiters": true,
+    //   "show-arrows-on-hover": true,
+    // },
+    // vuetifyCarouselItem: {
+    //   transition: "fade-transition",
+    //   "reverse-transition": "fade-transition",
+    // },
     vuetifyRow: {
       align: "center",
       class: "ma-0",
@@ -113,9 +112,9 @@ export default {
   },
 
   methods: {
-    getImgUrl(agencyId, imgNum) {
-      return `/api/upload/${agencyId}?image=${imgNum}`;
-    },
+    // getImgUrl(agencyId, imgNum) {
+    //   return `/api/upload/${agencyId}?image=${imgNum}`;
+    // },
 
     async launchReviewCard() {
       if (this.$_isloggedIn() === false) {
