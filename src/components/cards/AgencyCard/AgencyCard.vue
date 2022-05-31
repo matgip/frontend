@@ -10,7 +10,7 @@
 
     <span>
       <div class="agency_title_container">
-        <h3>{{ agency.place_name }}</h3>
+        <h2>{{ agency.place_name }}</h2>
       </div>
 
       <!-- <div class="divider" /> -->
@@ -170,7 +170,7 @@ export default {
 /* .divider {
   margin: 4px 4px;
 
-  border-top: 1px solid #e0e0e0;
+  border-top: 2px solid #e0e0e0;
   border-radius: 0;
 } */
 

@@ -4,6 +4,8 @@ import VueFileAgentStyles from "vue-file-agent/dist/vue-file-agent.css";
 import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import store from "./store";
+// apexchart
+import VueApexCharts from "vue-apexcharts";
 
 import "@/plugins/mixins";
 
@@ -13,6 +15,9 @@ Vue.config.productionTip = false;
 
 Vue.use(VueFileAgent);
 Vue.use(VueFileAgentStyles);
+
+Vue.use(VueApexCharts);
+Vue.component("apexchart", VueApexCharts);
 
 window.Kakao.init(process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY);
 

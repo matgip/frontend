@@ -14,6 +14,14 @@
         <h3 class="mr-14">지금 보고 있는 부동산</h3>
       </div>
       <Agency :agency="agency" :key="agency.id" @open-reviews-card="onOpenReviews()" />
+
+      <!-- 연령대 분포 Pie chart -->
+      <div v-if="Object.keys(this.agency.views).length !== 0" class="view_pie_chart_container">
+        <h4 class="view_pie_chart_title">연령대별 조회</h4>
+        <div class="view_pie_chart">
+          <BasePieGraph :series="chartSeries" :labels="chartLabels" :key="agency.id" />
+        </div>
+      </div>
     </div>
 
     <!-- 주변 부동산 -->
@@ -52,6 +60,7 @@ import NoContent from "@/components/cards/NoContentCard/NoContent.vue";
 import Reviews from "@/components/cards/ReviewsCard/Reviews.vue";
 
 import { mapGetters } from "vuex";
+import BasePieGraph from "../../../common/BasePieGraph.vue";
 
 export default {
   components: {
@@ -59,6 +68,7 @@ export default {
     NoContent,
     SearchFilter,
     Reviews,
+    BasePieGraph,
   },
 
   async mounted() {
@@ -76,6 +86,9 @@ export default {
       agencyPage: 1,
       agencies: [],
       sorted: [],
+
+      chartSeries: [],
+      chartLabels: [],
 
       comparator: this.$_orderByStars,
 
@@ -112,9 +125,13 @@ export default {
   },
 
   watch: {
-    agency: function(val) {
-      if (Object.keys(this.agency).length === 0) return;
-      val.type = "agency";
+    agency: function() {
+      this.chartSeries = [];
+      this.chartLabels = [];
+      for (const ageRange in this.agency.views) {
+        this.chartSeries.push(parseInt(this.agency.views[ageRange]));
+        this.chartLabels.push(`${ageRange.split(":")[1]}대`);
+      }
     },
 
     sorted: function() {
@@ -192,6 +209,19 @@ export default {
   cursor: pointer;
 
   border-bottom: 2px solid #e0e0e0;
+}
+
+.view_pie_chart_container {
+  margin: 30px 14px;
+}
+
+.view_pie_chart_title {
+  padding-left: 4px;
+}
+
+.view_pie_chart {
+  display: flex;
+  justify-content: center;
 }
 
 .agencies_filter {
