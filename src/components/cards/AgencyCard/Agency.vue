@@ -73,9 +73,8 @@ export default {
 
   async mounted() {
     try {
-      const { y, x } = this.center;
-      this.agencies = await agencyApi.searchByCenter(x, y);
-      this.sorted = mergesort(this.comparator, await agencyApi.searchByCenter(x, y));
+      await this.updateAgencies();
+      this.updatePieChart();
     } catch (err) {
       console.error(err);
     }
@@ -126,12 +125,7 @@ export default {
 
   watch: {
     agency: function() {
-      this.chartSeries = [];
-      this.chartLabels = [];
-      for (const ageRange in this.agency.views) {
-        this.chartSeries.push(parseInt(this.agency.views[ageRange]));
-        this.chartLabels.push(`${ageRange.split(":")[1]}대`);
-      }
+      this.updatePieChart();
     },
 
     sorted: function() {
@@ -140,9 +134,7 @@ export default {
 
     center: async function() {
       try {
-        const { y, x } = this.center;
-        this.agencies = await agencyApi.searchByCenter(x, y);
-        this.sorted = mergesort(this.comparator, await agencyApi.searchByCenter(x, y));
+        await this.updateAgencies();
       } catch (err) {
         console.error(err);
       }
@@ -177,6 +169,21 @@ export default {
     },
     onCloseReviews() {
       this.isReviewsVisible = false;
+    },
+
+    updatePieChart() {
+      this.chartSeries = [];
+      this.chartLabels = [];
+      for (const ageRange in this.agency.views) {
+        this.chartSeries.push(parseInt(this.agency.views[ageRange]));
+        this.chartLabels.push(`${ageRange.split(":")[1]}대`);
+      }
+    },
+
+    async updateAgencies() {
+      const { y, x } = this.center;
+      this.agencies = await agencyApi.searchByCenter(x, y);
+      this.sorted = mergesort(this.comparator, await agencyApi.searchByCenter(x, y));
     },
 
     $_orderByLikes(a, b) {
