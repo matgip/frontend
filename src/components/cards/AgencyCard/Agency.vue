@@ -105,9 +105,9 @@ export default {
     }),
 
     agencyPageCount() {
-      const agenciesPageCnt = this.agencies.length;
-      if (agenciesPageCnt <= this.MAX_AGENCIES_PER_PAGE) return 1;
-      return Math.trunc(agenciesPageCnt / this.MAX_AGENCIES_PER_PAGE + 1);
+      return this.agencies.length <= this.MAX_AGENCIES_PER_PAGE
+        ? 1
+        : Math.trunc(this.agencies.length / this.MAX_AGENCIES_PER_PAGE + 1);
     },
   },
 
@@ -118,7 +118,7 @@ export default {
     },
 
     sorted: function() {
-      if (this.sorted.length !== 0) this.$emit("on-upload-complete");
+      this.sorted.length !== 0 && this.$emit("on-upload-complete");
     },
 
     center: async function() {

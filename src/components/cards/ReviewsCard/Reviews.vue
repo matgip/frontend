@@ -158,11 +158,9 @@ export default {
     try {
       await this.fetch();
 
-      if (await agencyApi.getLikes(this.agency.id, this.user.id)) {
-        this.vuetifyButton = this.buttonLiked;
-      } else {
-        this.vuetifyButton = this.buttonUnliked;
-      }
+      this.vuetifyButton = (await agencyApi.getLikes(this.agency.id, this.user.id))
+        ? this.buttonLiked
+        : this.buttonUnliked;
 
       this.$store.subscribe(async (mutation) => {
         if (mutation.type === "UPDATE_AGENCY") {
