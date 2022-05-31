@@ -42,9 +42,7 @@
       <!-- 부동산 리뷰 확인 버튼 -->
       <div class="agency_review_button_container">
         <p>
-          <v-btn v-bind="vuetifyReviewButton" @click="launchReviewCard()">
-            다른 사람들의 리뷰를 확인해보세요!
-          </v-btn>
+          <v-btn v-bind="vuetifyReviewButton" @click="launchReviewCard()"> {{ agency.reviewCnt }} 명의 리뷰 </v-btn>
         </p>
       </div>
     </span>
