@@ -8,14 +8,20 @@
     <Reviews @close-reviews-card="onCloseReviews()" />
   </div>
   <div v-else>
-    <Agency v-if="agency.id" :agency="agency" :key="agency.id" @open-reviews-card="onOpenReviews()" />
+    <!-- 현재 조회 중인 부동산 -->
+    <div v-if="agency.id">
+      <div class="title_container">
+        <h3 class="mr-14">지금 보고 있는 부동산</h3>
+      </div>
+      <Agency :agency="agency" :key="agency.id" @open-reviews-card="onOpenReviews()" />
+    </div>
 
     <!-- 주변 부동산 -->
     <div v-if="sorted.length !== 0">
-      <div class="dashboard_agencies_title_container">
-        <h3 class="mr-14">근처 부동산</h3>
+      <div class="title_container">
+        <h3 class="mr-14">근처에 이런 부동산 어때요?</h3>
         <img src="@/assets/images/filter.png" width="32" height="32" @click="onOpenFilter()" />
-        <div class="dashboard_agencies_filter" @click="onOpenFilter()">
+        <div class="agencies_filter" @click="onOpenFilter()">
           필터
         </div>
       </div>
@@ -185,7 +191,7 @@ export default {
 </script>
 
 <style>
-.dashboard_agencies_title_container {
+.title_container {
   margin: 14px;
 
   display: flex;
@@ -193,9 +199,11 @@ export default {
   align-items: center;
 
   cursor: pointer;
+
+  border-bottom: 2px solid #e0e0e0;
 }
 
-.dashboard_agencies_filter {
+.agencies_filter {
   font-size: 14px;
   font-weight: bold;
   margin-left: 8px;

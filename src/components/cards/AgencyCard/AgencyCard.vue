@@ -13,7 +13,7 @@
         <h3>{{ agency.place_name }}</h3>
       </div>
 
-      <div class="divider" />
+      <!-- <div class="divider" /> -->
       <!-- 부동산 평점 -->
       <div class="agency_rating_container">
         <p>
@@ -36,7 +36,7 @@
         </p>
       </div>
 
-      <div class="divider" />
+      <!-- <div class="divider" /> -->
 
       <!-- 부동산 리뷰 확인 버튼 -->
       <div class="agency_review_button_container">
@@ -167,12 +167,12 @@ export default {
   font-size: 12px;
 }
 
-.divider {
+/* .divider {
   margin: 4px 4px;
 
   border-top: 1px solid #e0e0e0;
   border-radius: 0;
-}
+} */
 
 /* SASS */
 .v-application p {
