@@ -61,13 +61,13 @@ export default {
   display: table-cell;
   font-size: 12px;
   margin-right: 12px;
-  width: 98px;
+  width: 100px;
 }
 
 .section_list_item_graph {
   display: table-cell;
   width: 144px;
-  padding-left: 12px;
+  padding-left: 20px;
   white-space: nowrap;
   vertical-align: middle;
 }
