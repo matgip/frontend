@@ -9,16 +9,38 @@
 
     <div class="divider"></div>
 
-    <ul class="realtime_view_list" v-for="(agency, i) in agenciesTopHits" :key="i">
-      <li class="realtime_view_list_item">
-        <div class="realtime_view_list_item_ranking">{{ i + 1 }}</div>
-        <div class="realtime_view_list_item_agency_info">{{ agency.name }}</div>
-        <div class="realtime_view_list_item_views">{{ agency.views }}명이 봤어요</div>
-      </li>
-      <li class="realtime_view_list_item">
-        <div class="realtime_view_list_item_address_name">{{ agency.address_name }}</div>
-      </li>
-    </ul>
+    <v-tabs color="deep-orange" v-model="selected">
+      <v-tab>
+        부동산
+      </v-tab>
+      <v-tab>
+        지역별
+      </v-tab>
+    </v-tabs>
+
+    <!-- 부동산 TOP 15 -->
+    <div v-if="selected === 0">
+      <ul class="realtime_view_list" v-for="(agency, i) in agenciesTopHits" :key="i">
+        <li class="realtime_view_list_item">
+          <div class="realtime_view_list_item_ranking">{{ i + 1 }}</div>
+          <div class="realtime_view_list_item_agency_info">{{ agency.name }}</div>
+          <div class="realtime_view_list_item_views">{{ agency.views }}명이 봤어요</div>
+        </li>
+        <li class="realtime_view_list_item">
+          <div class="realtime_view_list_item_address_name">{{ agency.address_name }}</div>
+        </li>
+      </ul>
+    </div>
+    <!-- 지역별 TOP -->
+    <div v-if="selected === 1">
+      <ul class="realtime_view_list" v-for="(area, i) in areaTopHits" :key="i">
+        <li class="realtime_view_list_item">
+          <div class="realtime_view_list_item_ranking">{{ i + 1 }}</div>
+          <div class="realtime_view_list_item_agency_info">{{ area[0] }}</div>
+          <div class="realtime_view_list_item_views">{{ area[1] }}명이 봤어요</div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -28,7 +50,8 @@ import agencyApi from "@/api/agency";
 export default {
   async mounted() {
     try {
-      this.agenciesTopHits = await agencyApi.getTopHits();
+      this.agenciesTopHits = await agencyApi.getTopHitAgency();
+      this.areaTopHits = this.constructTopAreaArray();
     } catch (err) {
       console.error(err);
     }
@@ -36,6 +59,9 @@ export default {
 
   data() {
     return {
+      selected: 0,
+      topHits: [],
+      areaTopHits: [],
       agenciesTopHits: [],
     };
   },
@@ -43,6 +69,30 @@ export default {
   watch: {
     agenciesTopHits: function() {
       if (this.agenciesTopHits.length !== 0) this.$emit("on-upload-complete");
+    },
+  },
+
+  methods: {
+    constructTopAreaArray() {
+      let tempArea = {};
+      let sortable = [];
+      // convert array to object by area
+      for (let agency of this.agenciesTopHits) {
+        tempArea[this.getArea(agency.address_name)] ??= 0;
+        tempArea[this.getArea(agency.address_name)] += 1;
+      }
+      // revert to array for sorting
+      for (let area in tempArea) {
+        sortable.push([area, tempArea[area]]);
+      }
+      sortable.sort((a, b) => {
+        return b[1] - a[1];
+      });
+      return sortable;
+    },
+    getArea(addressName) {
+      const split = addressName.split(" ");
+      return split.slice(0, split.length - 2).join(" ");
     },
   },
 };

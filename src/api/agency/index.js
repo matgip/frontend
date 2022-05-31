@@ -84,7 +84,7 @@ class AgencyAPI extends ModeAPI {
     }
   }
 
-  async getTopHits() {
+  async getTopHitAgency() {
     try {
       const resp = await this.api.get(this.getUrl("realtime_agencies_views" + "?range=0~14"));
       return resp.data;
