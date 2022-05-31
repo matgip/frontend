@@ -23,7 +23,7 @@
       <ul class="realtime_view_list" v-for="(agency, i) in agenciesTopHits" :key="i">
         <li class="realtime_view_list_item">
           <div class="realtime_view_list_item_ranking">{{ i + 1 }}</div>
-          <div class="realtime_view_list_item_agency_info">{{ agency.name }}</div>
+          <div class="realtime_view_list_item_info">{{ agency.name }}</div>
           <div class="realtime_view_list_item_views">{{ agency.views }}명이 봤어요</div>
         </li>
         <li class="realtime_view_list_item">
@@ -36,7 +36,7 @@
       <ul class="realtime_view_list" v-for="(item, i) in areaTopHits" :key="i">
         <li class="realtime_view_list_item">
           <div class="realtime_view_list_item_ranking">{{ i + 1 }}</div>
-          <div class="realtime_view_list_item_agency_info">{{ item.area }}</div>
+          <div class="realtime_view_list_item_info">{{ item.area }}</div>
           <div class="realtime_view_list_item_views">{{ item.views }}명이 봤어요</div>
         </li>
       </ul>
@@ -120,7 +120,7 @@ export default {
   width: 20px;
 }
 
-.realtime_view_list_item_agency_info {
+.realtime_view_list_item_info {
   display: table-cell;
   width: 144px;
   padding-left: 12px;
