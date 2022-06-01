@@ -107,10 +107,11 @@ class ReviewByLikeAPI extends NestedAPI {
     return reviewsByLike;
   }
 
-  async added(agencyId, userId) {
+  async update(agencyId, userId, likeEntity) {
+    const { increment } = likeEntity;
     await this.put({
       baseId: agencyId,
-      data: { user: userId, count: 1 },
+      data: { userId: userId, increment: increment },
     });
   }
 }
@@ -137,12 +138,28 @@ class ReviewByTime extends NestedAPI {
 }
 
 class ReviewLike extends NestedAPI {
-  async add(agencyId, writerUserId, likeUserId) {
-    const response = await this.post({
+  async isUserLikeThisReview(likeEntity) {
+    const { agencyId, writerId, userId } = likeEntity;
+    try {
+      const resp = await this.api.get(this.getUrl(agencyId, [writerId]), {
+        params: {
+          userId: userId,
+        },
+      });
+      return resp.data;
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
+  async update(likeEntity) {
+    const { agencyId, writerId, userId, operation } = likeEntity;
+    const response = await this.put({
       baseId: agencyId,
-      subIds: [writerUserId],
+      subIds: [writerId],
       data: {
-        user: likeUserId,
+        userId: userId,
+        operation: operation,
       },
     });
     if (response === undefined) {

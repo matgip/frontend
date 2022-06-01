@@ -71,7 +71,7 @@ class AgencyAPI extends ModeAPI {
     }
   }
 
-  async getLikes(agencyId, userId) {
+  async isUserLikeThisAgency(agencyId, userId) {
     try {
       const resp = await this.api.get(this.getUrl(agencyId) + "/likes", {
         params: {

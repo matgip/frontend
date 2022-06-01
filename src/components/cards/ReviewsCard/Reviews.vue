@@ -161,7 +161,7 @@ export default {
     try {
       await this.fetch();
 
-      this.vuetifyButton = (await agencyApi.getLikes(this.agency.id, this.user.id))
+      this.vuetifyButton = (await agencyApi.isUserLikeThisAgency(this.agency.id, this.user.id))
         ? this.buttonLiked
         : this.buttonUnliked;
 
@@ -187,7 +187,7 @@ export default {
 
     async onLikeAgency() {
       try {
-        if (await agencyApi.getLikes(this.agency.id, this.user.id)) {
+        if (await agencyApi.isUserLikeThisAgency(this.agency.id, this.user.id)) {
           await agencyApi.updateLikes(this.agency.id, { userId: this.user.id, operation: "decrease" });
           this.vuetifyButton = this.buttonUnliked;
           alert("'좋아요'를 취소했어요.");
@@ -203,14 +203,35 @@ export default {
 
     async onLikeReview(userId) {
       try {
-        const response = await reviewLikeApi.add(this.agency.id, userId, this.user.id);
-        if (response.result === "already-added") {
-          alert("이미 이 리뷰를 좋아합니다.");
-          return;
-        } else if (response.result === "success") {
+        if (
+          await reviewLikeApi.isUserLikeThisReview({
+            agencyId: this.agency.id,
+            writerId: userId,
+            userId: this.user.id,
+          })
+        ) {
+          await reviewLikeApi.update({
+            agencyId: this.agency.id,
+            writerId: userId,
+            userId: this.user.id,
+            operation: "decrease",
+          });
+          await reviewByLikeApi.update(this.agency.id, userId, {
+            increment: -1,
+          });
+          alert("'좋아요'를 취소했어요.");
+        } else {
+          await reviewLikeApi.update({
+            agencyId: this.agency.id,
+            writerId: userId,
+            userId: this.user.id,
+            operation: "increase",
+          });
+          await reviewByLikeApi.update(this.agency.id, userId, {
+            increment: 1,
+          });
           alert("이 리뷰를 좋아합니다.");
         }
-        await reviewByLikeApi.added(this.agency.id, userId);
       } catch (err) {
         console.error(err);
       }
