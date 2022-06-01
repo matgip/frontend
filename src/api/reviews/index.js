@@ -85,37 +85,6 @@ function createReview(oReview, entity) {
   return review;
 }
 
-class ReviewByLikeAPI extends NestedAPI {
-  async fetch(agencyId, queryRange) {
-    const reviewsByLike = [];
-    const response = await this.get({
-      baseId: agencyId,
-      range: queryRange,
-    });
-    if (response === undefined) {
-      throw new Error("Failed to get review by like");
-    }
-
-    for (let data of response.data) {
-      const likes = data.score;
-      const userId = data.value.split(":")[1];
-
-      const resp = await reviewApi.fetch(agencyId, userId);
-      reviewsByLike.push(createReview(resp, { userId, likes }));
-    }
-
-    return reviewsByLike;
-  }
-
-  async update(agencyId, userId, likeEntity) {
-    const { increment } = likeEntity;
-    await this.put({
-      baseId: agencyId,
-      data: { userId: userId, increment: increment },
-    });
-  }
-}
-
 class ReviewByTime extends NestedAPI {
   async fetch(agencyId, queryRange) {
     const reviewsByTime = [];
@@ -138,6 +107,27 @@ class ReviewByTime extends NestedAPI {
 }
 
 class ReviewLike extends NestedAPI {
+  async fetch(agencyId, queryRange) {
+    const reviewsByLike = [];
+    const response = await this.get({
+      baseId: agencyId,
+      range: queryRange,
+    });
+    if (response === undefined) {
+      throw new Error("Failed to get review by like");
+    }
+
+    for (let data of response.data) {
+      const likes = data.score;
+      const userId = data.value.split(":")[1];
+
+      const resp = await reviewApi.fetch(agencyId, userId);
+      reviewsByLike.push(createReview(resp, { userId, likes }));
+    }
+
+    return reviewsByLike;
+  }
+
   async isUserLikeThisReview(likeEntity) {
     const { agencyId, writerId, userId } = likeEntity;
     try {
@@ -153,13 +143,14 @@ class ReviewLike extends NestedAPI {
   }
 
   async update(likeEntity) {
-    const { agencyId, writerId, userId, operation } = likeEntity;
+    const { agencyId, writerId, userId, operation, increment } = likeEntity;
     const response = await this.put({
       baseId: agencyId,
       subIds: [writerId],
       data: {
         userId: userId,
         operation: operation,
+        increment: increment,
       },
     });
     if (response === undefined) {
@@ -171,6 +162,5 @@ class ReviewLike extends NestedAPI {
 }
 
 export const reviewApi = new ReviewAPI("reviews", ["users"]);
-export const reviewByLikeApi = new ReviewByLikeAPI("reviews", ["likes"]);
 export const reviewByTimeApi = new ReviewByTime("reviews", ["time"]);
 export const reviewLikeApi = new ReviewLike("reviews", ["users", "likes"]);

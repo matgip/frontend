@@ -58,7 +58,7 @@ import Review from "./Review.vue";
 
 import { mapGetters } from "vuex";
 
-import { reviewByLikeApi, reviewByTimeApi, reviewLikeApi } from "@/api/reviews";
+import { reviewByTimeApi, reviewLikeApi } from "@/api/reviews";
 
 export default {
   components: {
@@ -215,8 +215,6 @@ export default {
             writerId: userId,
             userId: this.user.id,
             operation: "decrease",
-          });
-          await reviewByLikeApi.update(this.agency.id, userId, {
             increment: -1,
           });
           alert("'좋아요'를 취소했어요.");
@@ -226,8 +224,6 @@ export default {
             writerId: userId,
             userId: this.user.id,
             operation: "increase",
-          });
-          await reviewByLikeApi.update(this.agency.id, userId, {
             increment: 1,
           });
           alert("이 리뷰를 좋아합니다.");
@@ -245,7 +241,7 @@ export default {
       const maxRange = "0~-1";
 
       try {
-        this.reviews["like"] = await reviewByLikeApi.fetch(this.agency.id, maxRange);
+        this.reviews["like"] = await reviewLikeApi.fetch(this.agency.id, maxRange);
         this.reviews["time"] = await reviewByTimeApi.fetch(this.agency.id, maxRange);
         this.calculate(this.reviews["like"]);
       } catch (err) {
