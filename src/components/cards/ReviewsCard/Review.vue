@@ -31,7 +31,7 @@
               :btn-props="vuetifyButton"
               :icon-props="vuetifyButtonIcon"
               :on-click="emitLike"
-              :icon="'fas fa-thumbs-up'"
+              :icon="'mdi-thumb-up'"
               :button="review.likes"
             />
           </div>
