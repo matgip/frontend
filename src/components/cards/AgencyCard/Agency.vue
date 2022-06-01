@@ -218,7 +218,7 @@ export default {
 
   cursor: pointer;
 
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .view_pie_chart_container {

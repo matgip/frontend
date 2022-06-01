@@ -293,6 +293,5 @@ export default {
 
 .reviews_tabs_title {
   margin-top: 40px;
-  border-bottom: 2px solid #d8d8d8;
 }
 </style>
