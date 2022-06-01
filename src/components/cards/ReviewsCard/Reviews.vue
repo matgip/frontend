@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="reviews_header_container">
+    <header class="reviews_header_container">
       <v-icon @click="onCloseCard()" v-bind="vuetifyLeftIcon">{{ fontAwesomeLeftArrow }}</v-icon>
       <h3>{{ agency.place_name }}</h3>
-    </div>
+    </header>
 
     <div class="reviews_statistics_container">
       <v-container>
@@ -27,6 +27,9 @@
     </div>
 
     <div class="reviews_tabs_container">
+      <div class="reviews_tabs_title">
+        <h3>부동산 리뷰</h3>
+      </div>
       <v-tabs v-bind="vuetifyTabs">
         <v-tab id="like" @click="onChangeOrder">좋아요 순</v-tab>
         <v-tab id="time" @click="onChangeOrder">최신 순</v-tab>
@@ -74,16 +77,16 @@ export default {
         count: 0,
         data: [0, 0, 0, 0, 0],
         name: "price",
-        title: "가격",
+        title: "수수료",
         color: "#BA68C8",
         fields: ["veryCheap", "cheap", "avgPrice", "expensive", "veryExpensive"],
-        categories: ["10% 이상 쌈", "5~10% 더 쌈", "평균 가격", "5~10% 더 비쌈", "10% 이상 비쌈"],
+        categories: ["10% 이상 쌈", "5~10% 더 쌈", "평균 수수료", "5~10% 더 비쌈", "10% 이상 비쌈"],
       },
       {
         count: 0,
         data: [0, 0, 0, 0, 0],
         name: "kindness",
-        title: "친절함",
+        title: "친절",
         color: "#4DD0E1",
         fields: ["veryKind", "kind", "soso", "unKind", "veryUnkind"],
         categories: ["매우 친절", "친절", "보통", "불친절", "매우 불친절"],
@@ -274,7 +277,7 @@ export default {
 }
 
 .reviews_statistics_container {
-  /* width: 380px; */
+  margin: 6px;
 }
 
 .reviews_button_container {
@@ -286,5 +289,10 @@ export default {
 
 .reviews_tabs_container {
   margin: 0px 18px;
+}
+
+.reviews_tabs_title {
+  margin-top: 40px;
+  border-bottom: 2px solid #d8d8d8;
 }
 </style>

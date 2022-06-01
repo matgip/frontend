@@ -99,7 +99,7 @@ export default {
         items: [
           { value: "veryExpensive", text: "10% 이상 비쌈" },
           { value: "expensive", text: "5~10% 더 비쌈" },
-          { value: "avgPrice", text: "평균 가격" },
+          { value: "avgPrice", text: "평균 수수료" },
           { value: "cheap", text: "5~10% 더 쌈" },
           { value: "veryCheap", text: "10% 이상 쌈" },
         ],

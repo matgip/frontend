@@ -148,6 +148,6 @@ export default {
 }
 
 .divider {
-  border-top: solid 1px #dcdcdc;
+  border-top: solid 2px #dcdcdc;
 }
 </style>
