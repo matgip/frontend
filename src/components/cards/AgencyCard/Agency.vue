@@ -17,7 +17,7 @@
 
       <!-- 연령대 분포 Pie chart -->
       <div v-if="Object.keys(this.agency.views).length !== 0" class="view_pie_chart_container">
-        <h4 class="view_pie_chart_title">연령대별 조회</h4>
+        <h5 class="view_pie_chart_title">연령대별 조회</h5>
         <div class="view_pie_chart">
           <BasePieGraph :series="chartSeries" :labels="chartLabels" :key="agency.id" />
         </div>
@@ -124,8 +124,11 @@ export default {
   },
 
   watch: {
-    agency: function() {
-      this.updatePieChart();
+    agency: {
+      immediate: true,
+      handler() {
+        this.updatePieChart();
+      },
     },
 
     sorted: function() {
@@ -223,7 +226,7 @@ export default {
 }
 
 .view_pie_chart_title {
-  padding-left: 4px;
+  padding-left: 8px;
 }
 
 .view_pie_chart {

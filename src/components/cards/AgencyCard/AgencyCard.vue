@@ -10,7 +10,7 @@
 
     <span>
       <div class="agency_title_container">
-        <h2>{{ agency.place_name }}</h2>
+        <h4>{{ agency.place_name }}</h4>
       </div>
 
       <!-- <div class="divider" /> -->
