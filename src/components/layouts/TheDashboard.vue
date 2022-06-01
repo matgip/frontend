@@ -25,7 +25,7 @@
               뉴스
             </v-tab>
             <v-tab>
-              자유 게시판
+              테스트
             </v-tab>
           </v-tabs>
         </template>
