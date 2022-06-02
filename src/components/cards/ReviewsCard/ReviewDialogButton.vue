@@ -174,7 +174,7 @@ export default {
     async onSubmit() {
       try {
         const response = await reviewApi.getReview(this.agency.id, this.user.id);
-        if (response.length === 0) {
+        if (!response) {
           const current = new Date();
           await reviewApi.postReview(this.agency.id, {
             time: current.toLocaleDateString(),
