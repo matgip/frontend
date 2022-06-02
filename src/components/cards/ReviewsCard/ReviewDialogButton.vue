@@ -176,7 +176,7 @@ export default {
         const response = await reviewApi.getReview({ baseId: this.agency.id, subIds: [this.user.id] });
         if (response && response.status === 204) {
           const current = new Date();
-          await reviewApi.postReview(agencyId, {
+          await reviewApi.postReview(this.agency.id, {
             time: current.toLocaleDateString(),
             userId: this.user.id,
             // 리뷰 내용
