@@ -81,6 +81,15 @@ class ReviewAPI extends ModeAPI {
     }
   }
 
+  async postReview(agencyId, postEntity) {
+    try {
+      const resp = await this.api.post(this.getUrl(agencyId) + "/users", postEntity);
+      return resp.data;
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
+
   async updateLikes(likeEntity) {
     const { agencyId, writerId, userId, operation, increment } = likeEntity;
     const response = await this.api.put(this.getUrl(agencyId) + `/writers/${writerId}/likes`, {
