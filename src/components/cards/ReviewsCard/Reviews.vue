@@ -58,7 +58,7 @@ import Review from "./Review.vue";
 
 import { mapGetters } from "vuex";
 
-import { reviewByTimeApi, reviewLikeApi } from "@/api/reviews";
+import { reviewApi } from "@/api/reviews";
 
 export default {
   components: {
@@ -204,13 +204,13 @@ export default {
     async onLikeReview(userId) {
       try {
         if (
-          await reviewLikeApi.isUserLikeThisReview({
+          await reviewApi.isUserLikeThisReview({
             agencyId: this.agency.id,
             writerId: userId,
             userId: this.user.id,
           })
         ) {
-          await reviewLikeApi.update({
+          await reviewApi.updateLikes({
             agencyId: this.agency.id,
             writerId: userId,
             userId: this.user.id,
@@ -219,7 +219,7 @@ export default {
           });
           alert("'좋아요'를 취소했어요.");
         } else {
-          await reviewLikeApi.update({
+          await reviewApi.updateLikes({
             agencyId: this.agency.id,
             writerId: userId,
             userId: this.user.id,
@@ -241,8 +241,8 @@ export default {
       const maxRange = "0~-1";
 
       try {
-        this.reviews["like"] = await reviewLikeApi.fetch(this.agency.id, maxRange);
-        this.reviews["time"] = await reviewByTimeApi.fetch(this.agency.id, maxRange);
+        this.reviews["like"] = await reviewApi.getReviewsByLikeOrder(this.agency.id, maxRange);
+        this.reviews["time"] = await reviewApi.getReviewsByTimeOrder(this.agency.id, maxRange);
         this.calculate(this.reviews["like"]);
       } catch (err) {
         console.error(err);

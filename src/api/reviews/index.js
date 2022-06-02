@@ -1,74 +1,5 @@
 import { ModeAPI } from "../service";
 
-class NestedAPI extends ModeAPI {
-  subResources;
-
-  constructor(baseResource, subResources) {
-    super(baseResource);
-    if (!subResources) throw new Error("Sub resource is not provided");
-    this.subResources = subResources;
-  }
-
-  getUrl(baseId, subIds = [], range = "") {
-    if (!baseId) throw Error("base id is not provided");
-    let url = `${this.baseURL}/${this.resource}/${baseId}`;
-    this.subResources.forEach((subResource, idx) => {
-      url += `/${subResource}`;
-      if (subIds[idx]) url += `/${subIds[idx]}`;
-    });
-    if (range.length > 0) {
-      url += `?range=${range}`;
-    }
-    return url;
-  }
-
-  async get(getEntity) {
-    try {
-      const { baseId, subIds, range } = getEntity;
-      if (!baseId) throw Error("id is not provided");
-      const resp = await this.api.get(this.getUrl(baseId, subIds, range));
-      return resp;
-    } catch (err) {
-      this.handleError(err);
-    }
-  }
-
-  async post(postEntity) {
-    try {
-      const { baseId, subIds, data } = postEntity;
-      if (!baseId) throw Error("base id is not provided");
-      const resp = await this.api.post(this.getUrl(baseId, subIds), data);
-      return resp;
-    } catch (err) {
-      this.handleError(err);
-    }
-  }
-
-  async put(putEntity) {
-    try {
-      const { baseId, subIds, data } = putEntity;
-      if (!baseId) throw Error("base id is not provided");
-      const resp = await this.api.put(this.getUrl(baseId, subIds), data);
-      return resp;
-    } catch (err) {
-      this.handleError(err);
-    }
-  }
-}
-
-class ReviewAPI extends NestedAPI {
-  async fetch(agencyId, userId) {
-    const response = await this.get({
-      baseId: agencyId,
-      subIds: [userId],
-    });
-    if (response === undefined) {
-      throw new Error("Failed to get review");
-    }
-    return response.data;
-  }
-}
-
 const mapUserLike = new Map();
 
 function createReview(oReview, entity) {
@@ -85,12 +16,21 @@ function createReview(oReview, entity) {
   return review;
 }
 
-class ReviewByTime extends NestedAPI {
-  async fetch(agencyId, queryRange) {
-    const reviewsByTime = [];
-    const response = await this.get({
-      baseId: agencyId,
-      range: queryRange,
+class ReviewAPI extends ModeAPI {
+  async getReview(agencyId, userId) {
+    const response = await this.api.get(this.getUrl(agencyId) + `/users/${userId}`);
+    if (response === undefined) {
+      throw new Error("Failed to get review");
+    }
+    return response.data;
+  }
+
+  async getReviewsByTimeOrder(agencyId, query) {
+    const reviews = [];
+    const response = await this.api.get(this.getUrl(agencyId) + `/times`, {
+      params: {
+        range: query,
+      },
     });
     if (response === undefined) {
       throw new Error("Failed to get review by time");
@@ -98,20 +38,19 @@ class ReviewByTime extends NestedAPI {
 
     for (let data of response.data) {
       const userId = data.value.split(":")[1];
-      const resp = await reviewApi.fetch(agencyId, userId);
-      reviewsByTime.push(createReview(resp, { userId }));
+      const resp = await this.getReview(agencyId, userId);
+      reviews.push(createReview(resp, { userId }));
     }
 
-    return reviewsByTime;
+    return reviews;
   }
-}
 
-class ReviewLike extends NestedAPI {
-  async fetch(agencyId, queryRange) {
-    const reviewsByLike = [];
-    const response = await this.get({
-      baseId: agencyId,
-      range: queryRange,
+  async getReviewsByLikeOrder(agencyId, query) {
+    const reviews = [];
+    const response = await this.api.get(this.getUrl(agencyId) + `/likes`, {
+      params: {
+        range: query,
+      },
     });
     if (response === undefined) {
       throw new Error("Failed to get review by like");
@@ -121,17 +60,17 @@ class ReviewLike extends NestedAPI {
       const likes = data.score;
       const userId = data.value.split(":")[1];
 
-      const resp = await reviewApi.fetch(agencyId, userId);
-      reviewsByLike.push(createReview(resp, { userId, likes }));
+      const resp = await this.getReview(agencyId, userId);
+      reviews.push(createReview(resp, { userId, likes }));
     }
 
-    return reviewsByLike;
+    return reviews;
   }
 
   async isUserLikeThisReview(likeEntity) {
     const { agencyId, writerId, userId } = likeEntity;
     try {
-      const resp = await this.api.get(this.getUrl(agencyId, [writerId]), {
+      const resp = await this.api.get(this.getUrl(agencyId) + `/writers/${writerId}/likes`, {
         params: {
           userId: userId,
         },
@@ -142,16 +81,12 @@ class ReviewLike extends NestedAPI {
     }
   }
 
-  async update(likeEntity) {
+  async updateLikes(likeEntity) {
     const { agencyId, writerId, userId, operation, increment } = likeEntity;
-    const response = await this.put({
-      baseId: agencyId,
-      subIds: [writerId],
-      data: {
-        userId: userId,
-        operation: operation,
-        increment: increment,
-      },
+    const response = await this.api.put(this.getUrl(agencyId) + `/writers/${writerId}/likes`, {
+      userId: userId,
+      operation: operation,
+      increment: increment,
     });
     if (response === undefined) {
       throw new Error("Failed to update review like count");
@@ -161,6 +96,4 @@ class ReviewLike extends NestedAPI {
   }
 }
 
-export const reviewApi = new ReviewAPI("reviews", ["users"]);
-export const reviewByTimeApi = new ReviewByTime("reviews", ["time"]);
-export const reviewLikeApi = new ReviewLike("reviews", ["users", "likes"]);
+export const reviewApi = new ReviewAPI("reviews");

@@ -173,7 +173,7 @@ export default {
   methods: {
     async onSubmit() {
       try {
-        const response = await reviewApi.get({ baseId: this.agency.id, subIds: [this.user.id] });
+        const response = await reviewApi.getReview({ baseId: this.agency.id, subIds: [this.user.id] });
         if (response && response.status === 204) {
           const current = new Date();
           await reviewApi.post({
