@@ -18,7 +18,7 @@
       </v-tab>
     </v-tabs>
 
-    <div v-for="n in news" :key="n.title">
+    <div v-for="n in news[selected]" :key="n.title">
       <div class="news_item">
         <a :href="n.link" target="_blank" class="link">
           <h5 class="title">{{ n.title | strippedContent }}</h5>
@@ -39,22 +39,15 @@ import { newsApi } from "@/api/news";
 export default {
   async mounted() {
     try {
-      const investmentSentimentalNews = await newsApi.get({
-        keyword: "부동산 투자심리",
-        size: 10,
-      });
-      const regulationNews = await newsApi.get({
-        keyword: "부동산 규제",
-        size: 10,
-      });
-      const priceNews = await newsApi.get({
-        keyword: "부동산 실거래가",
-        size: 10,
-      });
-      this.investmentSentimentalNews = investmentSentimentalNews.items;
-      this.regulationNews = regulationNews.items;
-      this.priceNews = priceNews.items;
-      this.news = this.investmentSentimentalNews;
+      await Promise.all(
+        this.sections.map(async (section) => {
+          const response = await newsApi.get({
+            keyword: section.keyword,
+            size: section.size,
+          });
+          this.news.push(response.items);
+        })
+      );
     } catch (err) {
       console.error(err);
     }
@@ -64,28 +57,17 @@ export default {
     return {
       selected: -1,
       news: [],
-      investmentSentimentalNews: [],
-      priceNews: [],
-      regulationNews: [],
+      sections: [
+        { keyword: "부동산 투자심리", size: 10 },
+        { keyword: "부동산 규제", size: 10 },
+        { keyword: "부동산 실거래가", size: 10 },
+      ],
     };
   },
 
   watch: {
-    selected(val) {
-      switch (val) {
-        case 0:
-          this.news = this.investmentSentimentalNews;
-          break;
-        case 1:
-          this.news = this.priceNews;
-          break;
-        case 2:
-          this.news = this.regulationNews;
-      }
-    },
-
-    investmentSentimentalNews: function() {
-      if (this.investmentSentimentalNews.length !== 0) this.$emit("on-upload-complete");
+    news: function() {
+      if (this.news[0].length !== 0) this.$emit("on-upload-complete");
     },
   },
 
