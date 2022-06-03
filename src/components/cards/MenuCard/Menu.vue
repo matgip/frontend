@@ -21,10 +21,19 @@
         </div>
 
         <ul class="list_service">
-          <li v-if="!user" @click="launchLogin()"><i class="fa-solid fa-user"></i>로그인</li>
-          <li v-else @click="onLogout()"><i class="fas fa-sign-out-alt"></i>로그아웃</li>
-          <li><i class="fa-solid fa-comment-dots"></i>내가 작성한 리뷰</li>
-          <li><i class="fas fa-newspaper"></i>공지 사항</li>
+          <li v-if="!user" @click="launchLogin()">
+            <i class="fa-solid fa-user"><span>로그인</span></i>
+          </li>
+          <li v-else @click="onLogout()">
+            <i class="fas fa-sign-out-alt"><span>로그아웃</span></i>
+          </li>
+          <li>
+            <i class="fa-solid fa-comment-dots"><span>내가 작성한 리뷰</span></i
+            ><i class="fa-solid fa-angle-right"></i>
+          </li>
+          <li>
+            <i class="fas fa-newspaper"><span>공지 사항</span></i> <i class="fa-solid fa-angle-right"></i>
+          </li>
         </ul>
       </section>
       <section>
@@ -186,6 +195,10 @@ div.user_info_container {
 .list_service li {
   cursor: pointer;
 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   font-size: 16px;
 
   margin-top: 20px;
@@ -193,6 +206,15 @@ div.user_info_container {
 
 .list_service li i {
   margin-right: 10px;
+}
+
+.list_service li i span {
+  margin-left: 10px;
+
+  font-size: 16px;
+  font-weight: 400;
+
+  color: black;
 }
 
 @media screen and (max-width: 768px) {
