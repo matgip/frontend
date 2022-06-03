@@ -50,15 +50,15 @@
         </v-btn>
 
         <!-- 부동산 -->
-        <div v-if="selected === 0">
+        <div v-show="selected === 0">
           <Agency :center="mapCenter" @on-upload-complete="scrollUp()" />
         </div>
         <!-- 실시간 인기 부동산 TOP 15 -->
-        <div v-if="selected === 1">
+        <div v-show="selected === 1">
           <RealTimeViews @on-upload-complete="scrollUp()" />
         </div>
         <!-- 부동산 관련 뉴스 -->
-        <div v-if="selected === 2">
+        <div v-show="selected === 2">
           <News @on-upload-complete="scrollUp()" />
         </div>
       </section>
