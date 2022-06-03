@@ -23,7 +23,7 @@
         <ul class="list_service">
           <li v-if="!user" @click="launchLogin()"><i class="fa-solid fa-user"></i>로그인</li>
           <li v-else @click="onLogout()"><i class="fas fa-sign-out-alt"></i>로그아웃</li>
-          <li><i class="fa-solid fa-comments"></i>내가 작성한 리뷰</li>
+          <li><i class="fa-solid fa-comment-dots"></i>내가 작성한 리뷰</li>
           <li><i class="fas fa-newspaper"></i>공지 사항</li>
         </ul>
       </section>
