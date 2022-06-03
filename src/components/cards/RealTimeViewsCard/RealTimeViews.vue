@@ -66,11 +66,11 @@ export default {
     };
   },
 
-  watch: {
-    agenciesTopHits: function() {
-      if (this.agenciesTopHits.length !== 0) this.$emit("on-upload-complete");
-    },
-  },
+  // watch: {
+  //   agenciesTopHits: function() {
+  //     if (this.agenciesTopHits.length !== 0) this.$emit("on-upload-complete");
+  //   },
+  // },
 };
 </script>
 

@@ -65,11 +65,11 @@ export default {
     };
   },
 
-  watch: {
-    news: function() {
-      if (this.news[0].length !== 0) this.$emit("on-upload-complete");
-    },
-  },
+  // watch: {
+  //   news: function() {
+  //     if (this.news[0].length !== 0) this.$emit("on-upload-complete");
+  //   },
+  // },
 
   filters: {
     diffTime: function(publised) {

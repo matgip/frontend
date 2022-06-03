@@ -55,11 +55,11 @@
         </div>
         <!-- 실시간 인기 부동산 TOP 15 -->
         <div v-show="selected === 1">
-          <RealTimeViews @on-upload-complete="scrollUp()" />
+          <RealTimeViews />
         </div>
         <!-- 부동산 관련 뉴스 -->
         <div v-show="selected === 2">
-          <News @on-upload-complete="scrollUp()" />
+          <News />
         </div>
       </section>
     </div>
