@@ -48,9 +48,14 @@ class KakaoMap {
     this.selectedInfowindow = new kakao.maps.InfoWindow({});
 
     this.normalImage = new kakao.maps.MarkerImage(normalMarkerImage, new kakao.maps.Size(20, 20));
-    this.selectedImage = new kakao.maps.MarkerImage(selectedMarkerImage, new kakao.maps.Size(imgSize.width, imgSize.height));
+    this.selectedImage = new kakao.maps.MarkerImage(
+      selectedMarkerImage,
+      new kakao.maps.Size(imgSize.width, imgSize.height)
+    );
 
     kakao.maps.event.addListener(this.map, "idle", this.scan);
+    // 최초 Load시 스캔
+    this.scan();
   };
 
   scan = async () => {
