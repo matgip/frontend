@@ -18,7 +18,7 @@ function createReview(oReview, entity) {
 
 class ReviewAPI extends ModeAPI {
   async getReview(agencyId, userId) {
-    const response = await this.api.get(this.getUrl(agencyId) + `/users/${userId}`);
+    const response = await this.api.get(this.getUrl(agencyId) + `/user/${userId}`);
     if (response === undefined) {
       throw new Error("Failed to get review");
     }
@@ -70,7 +70,7 @@ class ReviewAPI extends ModeAPI {
   async isUserLikeThisReview(likeEntity) {
     const { agencyId, writerId, userId } = likeEntity;
     try {
-      const resp = await this.api.get(this.getUrl(agencyId) + `/writers/${writerId}/likes`, {
+      const resp = await this.api.get(this.getUrl(agencyId) + `/writer/${writerId}/likes`, {
         params: {
           userId: userId,
         },
@@ -83,7 +83,7 @@ class ReviewAPI extends ModeAPI {
 
   async postReview(agencyId, postEntity) {
     try {
-      const resp = await this.api.post(this.getUrl(agencyId) + "/users", postEntity);
+      const resp = await this.api.post(this.getUrl(agencyId) + "/user", postEntity);
       return resp.data;
     } catch (err) {
       this.handleError(err);
@@ -92,7 +92,7 @@ class ReviewAPI extends ModeAPI {
 
   async updateLikes(likeEntity) {
     const { agencyId, writerId, userId, operation, increment } = likeEntity;
-    const response = await this.api.put(this.getUrl(agencyId) + `/writers/${writerId}/likes`, {
+    const response = await this.api.put(this.getUrl(agencyId) + `/writer/${writerId}/likes`, {
       userId: userId,
       operation: operation,
       increment: increment,
@@ -105,4 +105,4 @@ class ReviewAPI extends ModeAPI {
   }
 }
 
-export const reviewApi = new ReviewAPI("reviews");
+export const reviewApi = new ReviewAPI("review");
