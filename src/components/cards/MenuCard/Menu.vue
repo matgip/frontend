@@ -29,10 +29,11 @@
           </li>
           <li>
             <i class="fa-solid fa-comment-dots"><span>내가 작성한 리뷰</span></i
-            ><i class="fa-solid fa-angle-right"></i>
+            ><i class="fa-solid fa-angle-right" style="color: gray;"></i>
           </li>
           <li>
-            <i class="fas fa-newspaper"><span>공지 사항</span></i> <i class="fa-solid fa-angle-right"></i>
+            <i class="fas fa-newspaper"><span>공지 사항</span></i>
+            <i class="fa-solid fa-angle-right" style="color: gray;"></i>
           </li>
         </ul>
       </section>
@@ -199,9 +200,9 @@ div.user_info_container {
   justify-content: space-between;
   align-items: center;
 
-  font-size: 16px;
+  font-size: 24px;
 
-  margin-top: 20px;
+  margin: 24px 0;
 }
 
 .list_service li i {
