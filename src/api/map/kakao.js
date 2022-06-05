@@ -47,7 +47,7 @@ class KakaoMap {
     // selectedInfowindow 는 오직 1개만 존재해야 되므로 this에 등록
     this.selectedInfowindow = new kakao.maps.InfoWindow({});
 
-    this.normalImage = new kakao.maps.MarkerImage(normalMarkerImage, new kakao.maps.Size(20, 20));
+    this.normalImage = new kakao.maps.MarkerImage(normalMarkerImage, new kakao.maps.Size(30, 35));
     this.selectedImage = new kakao.maps.MarkerImage(
       selectedMarkerImage,
       new kakao.maps.Size(imgSize.width, imgSize.height)
