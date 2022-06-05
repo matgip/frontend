@@ -36,13 +36,14 @@
       <Menu @close-menu-card="onCloseMenu()" />
     </section>
 
-    <div
-      id="dashboard_container"
-      :class="{ scrolled: isScrollUp }"
-      v-touch="{ up: () => scrollUp(), down: () => scrollDown() }"
-    >
+    <div id="dashboard_container" :class="{ scrolled: isScrollUp }">
       <section>
-        <v-btn id="dashboard_scroll_button" @click="scrollToggle" block>
+        <v-btn
+          id="dashboard_scroll_button"
+          @click="scrollToggle"
+          v-touch="{ up: () => scrollUp(), down: () => scrollDown() }"
+          block
+        >
           <v-icon v-show="!isScrollUp">{{ fontAwesomeArrowUp }}</v-icon>
           <v-icon v-show="isScrollUp">{{ fontAwesomeArrowDown }}</v-icon>
         </v-btn>
