@@ -36,15 +36,13 @@
       <Menu @close-menu-card="onCloseMenu()" />
     </section>
 
-    <div id="dashboard_container" :class="{ scrolled: isScrollUp }">
+    <div
+      id="dashboard_container"
+      :class="{ scrolled: isScrollUp }"
+      v-touch="{ up: () => scrollUp(), down: () => scrollDown() }"
+    >
       <section>
-        <v-btn
-          id="dashboard_scroll_button"
-          @click="scrollToggle"
-          @touchstart="onTouchStart"
-          @touchend="onTouchEnd"
-          block
-        >
+        <v-btn id="dashboard_scroll_button" @click="scrollToggle" block>
           <v-icon v-show="!isScrollUp">{{ fontAwesomeArrowUp }}</v-icon>
           <v-icon v-show="isScrollUp">{{ fontAwesomeArrowDown }}</v-icon>
         </v-btn>
@@ -130,22 +128,15 @@ export default {
       this.$store.commit("CLEAR_AGENCY");
     },
 
-    onTouchStart(e) {
-      this.startY = e.touches[0].clientY;
-    },
-
-    onTouchEnd(e) {
-      this.endY = e.changedTouches[0].clientY;
-      if (this.startY - this.endY >= 100) this.isScrollUp = true;
-      if (this.startY - this.endY <= -150) this.isScrollUp = false;
-    },
-
     scrollToggle() {
       this.isScrollUp = !this.isScrollUp;
     },
 
     scrollUp() {
       this.isScrollUp = true;
+    },
+    scrollDown() {
+      this.isScrollUp = false;
     },
     onOpenMenu() {
       this.isMenuVisible = true;
