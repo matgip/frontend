@@ -19,7 +19,6 @@ export default {
   async mounted() {
     try {
       this.reviews = await userApi.getReviewsByUser(this.user.id);
-      console.log(this.reviews);
     } catch (err) {
       console.error(err);
     }
