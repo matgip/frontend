@@ -20,7 +20,7 @@
           <!-- 리뷰 평점 -->
           <div>
             <v-row v-bind="vuetifyRow">
-              <v-rating v-bind="vuetifyRating" :value="review.rating" />
+              <v-rating v-bind="vuetifyRating" :value="parseFloat(review.rating)" />
               <div v-bind="vuetifyRatingText">({{ review.rating }})</div>
             </v-row>
           </div>

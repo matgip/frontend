@@ -1,6 +1,8 @@
 <template>
   <div id="reviews_container">
-    REVIEWS...of USER WROTE
+    <!-- <div v-for="(review, i) in reviews" :key="i">
+      <Review :review="review" />
+    </div> -->
   </div>
 </template>
 
@@ -17,13 +19,11 @@ export default {
       console.error(err);
     }
   },
-
   computed: {
     ...mapGetters({
       user: "GET_USER",
     }),
   },
-
   data() {
     return {
       reviews: [],
