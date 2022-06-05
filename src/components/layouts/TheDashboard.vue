@@ -126,6 +126,8 @@ export default {
   methods: {
     async onSearchByCenter() {
       this.mapCenter = this.map.getCenter();
+      // 기존에 보고 있던 부동산 제거
+      this.$store.commit("CLEAR_AGENCY");
     },
 
     onTouchStart(e) {

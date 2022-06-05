@@ -12,9 +12,9 @@
     </div>
     <div class="review_contents_container">
       <div v-show="review.title" class="review_contents_title">{{ review.title }}</div>
-      <div v-show="!review.title" class="review_contents_no_title">한줄 요약이 없어요</div>
+      <div v-show="!review.title" class="review_contents_no_title">한줄 요약이 없어요😓</div>
       <div v-show="review.text" class="review_contents_text">{{ review.text }}</div>
-      <div v-show="!review.text" class="review_contents_no_text">리뷰 내용이 없어요</div>
+      <div v-show="!review.text" class="review_contents_no_text">리뷰 내용이 없어요😓</div>
     </div>
   </div>
 </template>
