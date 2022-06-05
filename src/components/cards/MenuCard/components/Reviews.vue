@@ -1,6 +1,6 @@
 <template>
   <div id="reviews_container">
-    <div v-for="(review, i) in reviews" :key="i">
+    <div class="reviews" v-for="(review, i) in reviews" :key="i">
       <ReviewCard :review="review" />
     </div>
   </div>
@@ -39,7 +39,10 @@ export default {
 
 <style>
 #reviews_container {
-  background: #eaebed;
   margin-right: 10px;
+}
+
+.reviews {
+  margin-bottom: 8px;
 }
 </style>

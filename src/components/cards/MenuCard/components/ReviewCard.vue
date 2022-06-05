@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="review_card">
     <div class="review_title_container">
       <h5>{{ review.agencyName }}</h5>
       <p class="review_title_time">{{ review.time }} 일 작성</p>
@@ -43,6 +43,11 @@ export default {
 </script>
 
 <style>
+#review_card {
+  background: #eaebed;
+  border-radius: 10px;
+}
+
 .review_title_container {
   display: flex;
   justify-content: space-between;
@@ -53,7 +58,6 @@ export default {
 
 .review_title_time {
   font-size: 12px;
-  /* margin-right: 12px; */
 }
 
 .review_rating_container {
@@ -70,8 +74,6 @@ span.review_rating_text {
 
 .review_contents_container {
   padding-left: 10px;
-
-  border-bottom: 8px solid white;
 }
 
 .review_contents_title {
