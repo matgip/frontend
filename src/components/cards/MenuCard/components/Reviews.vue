@@ -1,16 +1,21 @@
 <template>
   <div id="reviews_container">
-    <!-- <div v-for="(review, i) in reviews" :key="i">
-      <Review :review="review" />
-    </div> -->
+    <div v-for="(review, i) in reviews" :key="i">
+      <ReviewCard :review="review" />
+    </div>
   </div>
 </template>
 
 <script>
 import { userApi } from "../../../../api/user";
 import { mapGetters } from "vuex";
+import ReviewCard from "./ReviewCard.vue";
 
 export default {
+  components: {
+    ReviewCard,
+  },
+
   async mounted() {
     try {
       this.reviews = await userApi.getReviewsByUser(this.user.id);
