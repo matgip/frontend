@@ -1,21 +1,5 @@
 import { ModeAPI } from "../service";
 
-const mapUserLike = new Map();
-
-function createReview(oReview, entity) {
-  const { userId, likes } = entity;
-  const review = Object.assign(oReview);
-  review.userId = userId;
-  if (likes === undefined) {
-    review.likes = mapUserLike.get(`user:${userId}`);
-  } else {
-    review.likes = likes;
-    mapUserLike.set(`user:${userId}`, likes);
-  }
-  review.rating = parseFloat(oReview.rating);
-  return review;
-}
-
 class ReviewAPI extends ModeAPI {
   async getReview(agencyId, userId) {
     const response = await this.api.get(this.getUrl(agencyId) + `/user/${userId}`);
@@ -26,7 +10,6 @@ class ReviewAPI extends ModeAPI {
   }
 
   async getReviewsByTimeOrder(agencyId, query) {
-    const reviews = [];
     const response = await this.api.get(this.getUrl(agencyId) + `/times`, {
       params: {
         range: query,
@@ -35,18 +18,10 @@ class ReviewAPI extends ModeAPI {
     if (response === undefined) {
       throw new Error("Failed to get review by time");
     }
-
-    for (let data of response.data) {
-      const userId = data.value.split(":")[1];
-      const resp = await this.getReview(agencyId, userId);
-      reviews.push(createReview(resp, { userId }));
-    }
-
-    return reviews;
+    return response.data;
   }
 
   async getReviewsByLikeOrder(agencyId, query) {
-    const reviews = [];
     const response = await this.api.get(this.getUrl(agencyId) + `/likes`, {
       params: {
         range: query,
@@ -55,16 +30,7 @@ class ReviewAPI extends ModeAPI {
     if (response === undefined) {
       throw new Error("Failed to get review by like");
     }
-
-    for (let data of response.data) {
-      const likes = data.score;
-      const userId = data.value.split(":")[1];
-
-      const resp = await this.getReview(agencyId, userId);
-      reviews.push(createReview(resp, { userId, likes }));
-    }
-
-    return reviews;
+    return response.data;
   }
 
   async isUserLikeThisReview(likeEntity) {

@@ -2,7 +2,7 @@
   <div class="dimmed">
     <div class="menu_container">
       <header class="menu_header_container">
-        <v-icon @click="onCloseCard()" v-bind="vuetifyIcon">{{ fontAwesomeLeftArrow }}</v-icon>
+        <v-icon @click="onCloseMenu()" v-bind="vuetifyIcon">{{ fontAwesomeLeftArrow }}</v-icon>
         <h3>내 정보</h3>
         <v-icon @click="onEditUserProfile()" v-bind="vuetifyIcon">{{ fontAwesomeGear }}</v-icon>
       </header>
@@ -21,25 +21,36 @@
         </div>
 
         <ul class="list_service">
-          <li v-if="!user" @click="launchLogin()">
+          <!-- 로그인 -->
+          <li v-show="!user" @click="launchLogin()">
             <i class="fa-solid fa-user"><span>로그인</span></i>
           </li>
-          <li v-else @click="onLogout()">
+          <li v-show="user" @click="onLogout()">
             <i class="fas fa-sign-out-alt"><span>로그아웃</span></i>
           </li>
-          <li>
+          <!-- 유저가 쓴 리뷰 목록 -->
+          <li v-show="user" @click="toggleReviews()">
             <i class="fa-solid fa-comment-dots"><span>내가 작성한 리뷰</span></i
-            ><i class="fa-solid fa-angle-right" style="color: gray;"></i>
+            ><i v-show="!isReviewsOpen" class="fa-solid fa-angle-right" style="color: gray;"></i>
+            <i v-show="isReviewsOpen" class="fa-solid fa-angle-down" style="color: gray;"></i>
           </li>
-          <li>
+          <div v-if="user && user.id" v-show="isReviewsOpen">
+            <Reviews />
+          </div>
+          <!-- 공지 사항 -->
+          <li @click="toggleAnnouncements()">
             <i class="fas fa-newspaper"><span>공지 사항</span></i>
-            <i class="fa-solid fa-angle-right" style="color: gray;"></i>
+            <i v-show="!isAnnouncementOpen" class="fa-solid fa-angle-right" style="color: gray;"></i>
+            <i v-show="isAnnouncementOpen" class="fa-solid fa-angle-down" style="color: gray;"></i>
           </li>
+          <div v-show="isAnnouncementOpen">
+            <Announcement />
+          </div>
         </ul>
       </section>
       <section>
         <!-- 로그인 card -->
-        <div v-if="loginVisibleFlag === true" class="dimmed">
+        <div v-if="isLoginVisible === true" class="dimmed">
           <div class="dimmed_layer_login_container radius_border">
             <Login @close-login-card="closeLogin()" :on-login-success-handler="onLoginSuccess" />
           </div>
@@ -53,15 +64,21 @@
 import Login from "@/components/cards/LoginCard/Login.vue";
 
 import { mapGetters } from "vuex";
+import Reviews from "./components/Reviews.vue";
+import Announcement from "./components/Announcement.vue";
 
 export default {
   components: {
     Login,
+    Reviews,
+    Announcement,
   },
 
   data() {
     return {
-      loginVisibleFlag: false,
+      isReviewsOpen: false,
+      isLoginVisible: false,
+      isAnnouncementOpen: false,
 
       fontAwesomeLeftArrow: "fa fa-arrow-left",
       fontAwesomeGear: "fa-light fa-gear",
@@ -81,12 +98,20 @@ export default {
   },
 
   methods: {
-    onCloseCard() {
+    onCloseMenu() {
       this.$emit("close-menu-card");
     },
 
     onEditUserProfile() {
       console.log("TEST");
+    },
+
+    toggleReviews() {
+      this.isReviewsOpen = !this.isReviewsOpen;
+    },
+
+    toggleAnnouncements() {
+      this.isAnnouncementOpen = !this.isAnnouncementOpen;
     },
 
     launchLogin() {
@@ -95,7 +120,7 @@ export default {
         return;
       }
 
-      this.loginVisibleFlag = true;
+      this.isLoginVisible = true;
     },
 
     async onLogout() {
@@ -107,7 +132,7 @@ export default {
     },
 
     closeLogin() {
-      this.loginVisibleFlag = false;
+      this.isLoginVisible = false;
     },
 
     $_isLoggedIn() {
