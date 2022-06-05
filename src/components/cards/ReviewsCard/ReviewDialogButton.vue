@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" v-bind="vuetifyDialog">
+    <v-dialog v-model="dialog" persistent max-width="700px">
       <template #activator="{ on }">
         <v-btn v-bind="vuetifyButton" v-on="on">
-          <v-icon v-bind="vuetifyButtonIcon">
+          <v-icon left>
             {{ fontAwesomeEdit }}
           </v-icon>
           리뷰 작성
@@ -23,11 +23,13 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>🌟 평점을 남겨주세요</v-list-item-title>
+              <div class="divider" />
             </v-list-item-content>
           </v-list-item>
+
           <v-list-item>
             <v-rating v-bind="vuetifyRating" v-model="rating"></v-rating>
-            <span v-bind="vuetifyRatingText"> ({{ rating }}) </span>
+            <span class="grey--text text-caption mr-2"> ({{ rating }}) </span>
           </v-list-item>
         </div>
 
@@ -119,10 +121,6 @@ export default {
     title: "",
     comments: "",
 
-    vuetifyDialog: {
-      persistent: true,
-      "max-width": "700px",
-    },
     vuetifyButton: {
       color: "deep-orange",
       outlined: true,
@@ -130,12 +128,6 @@ export default {
       small: true,
     },
     fontAwesomeEdit: "fas fa-edit",
-    vuetifyButtonIcon: {
-      left: true,
-    },
-    vuetifyRatingText: {
-      class: "grey--text text-caption mr-2",
-    },
     vuetifyRating: {
       size: 18,
       color: "amber",
@@ -218,3 +210,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.divider {
+  border-bottom: 1px solid #e0e0e0;
+}
+</style>

@@ -3,7 +3,7 @@
     <!-- 체크 박스 title -->
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title>{{ checkBoxObject.title }}</v-list-item-title>
+        <v-list-item-title class="checkbox_title">{{ checkBoxObject.title }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
@@ -65,5 +65,10 @@ export default {
 /* SASS */
 .v-dialog > .v-card > .v-card__title {
   padding: 16px;
+}
+
+.checkbox_title {
+  padding-bottom: 10px;
+  border-bottom: 3px solid #e0e0e0;
 }
 </style>
