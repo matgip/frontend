@@ -172,7 +172,7 @@ class KakaoMap {
     const toggleRoadView = () => {
       console.log("TT");
     };
-    const cancelIcon = "fa-solid fa-xmark";
+    const cancelIcon = "fa-solid fa-xmark fa-lg";
     const wrapCSS = `
       padding: 10px;
       
@@ -210,7 +210,7 @@ class KakaoMap {
       `    <div id="title" style="${titleCSS}">` +
       `      ${place.place_name}` +
       `    </div>` +
-      `    <i class="${cancelIcon}" ></i>` +
+      `    <i class="${cancelIcon}"></i>` +
       `  </div>` +
       `  <div style="${roadContainerCSS}">` +
       `    <p>${place.road_address_name}</p>` +
