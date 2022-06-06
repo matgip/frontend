@@ -47,7 +47,7 @@ class KakaoMap {
     });
 
     // selectedCustomOverlay 는 오직 1개만 존재해야 되므로 this에 등록
-    this.selectedCustomOverlay = new kakao.maps.CustomOverlay({});
+    this.selectedCustomOverlay = new kakao.maps.CustomOverlay({ yAnchor: 1.5 });
 
     this.normalImage = new kakao.maps.MarkerImage(normalMarkerImage, new kakao.maps.Size(30, 35));
     this.selectedImage = new kakao.maps.MarkerImage(
@@ -146,7 +146,7 @@ class KakaoMap {
         !!this.selectedMarker && this.selectedMarker.setImage(this.normalImage);
         marker.setImage(this.selectedImage);
         mouseoverInfowindow.close();
-
+        console.log("TEST");
         this.selectedCustomOverlay.setContent(this._getOverlayContent(place));
         this.selectedCustomOverlay.setPosition(marker.getPosition());
         this.selectedCustomOverlay.setMap(this.map);
@@ -179,8 +179,7 @@ class KakaoMap {
       border-radius: 10px;
       border: 2px solid #AFB42B;
       background-color: white;
-      
-      margin-bottom : 190px;
+
     `;
     const titleContainerCSS = `
       display: flex;
