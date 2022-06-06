@@ -44,8 +44,8 @@ class KakaoMap {
       minLevel: CLUSTER_MIN_LEVEL, // 클러스터 할 최소 지도 레벨
     });
 
-    // selectedInfowindow 는 오직 1개만 존재해야 되므로 this에 등록
-    this.selectedInfowindow = new kakao.maps.InfoWindow({});
+    // selectedCustomOverlay 는 오직 1개만 존재해야 되므로 this에 등록
+    this.selectedCustomOverlay = new kakao.maps.CustomOverlay({});
 
     this.normalImage = new kakao.maps.MarkerImage(normalMarkerImage, new kakao.maps.Size(30, 35));
     this.selectedImage = new kakao.maps.MarkerImage(
@@ -131,8 +131,6 @@ class KakaoMap {
     const mouseoverContent = '<div style="padding:2px;">' + place.place_name + "</div>";
     const mouseoverInfowindow = new kakao.maps.InfoWindow({ content: mouseoverContent });
 
-    const selectedContent = '<div style="padding:5px;font-size:12px;">' + place.place_name + "</div>";
-
     kakao.maps.event.addListener(marker, "mouseover", () => {
       if (!this.selectedMarker || this.selectedMarker !== marker) {
         mouseoverInfowindow.open(this.map, marker);
@@ -146,8 +144,11 @@ class KakaoMap {
         !!this.selectedMarker && this.selectedMarker.setImage(this.normalImage);
         marker.setImage(this.selectedImage);
         mouseoverInfowindow.close();
-        this.selectedInfowindow.setContent(selectedContent);
-        this.selectedInfowindow.open(this.map, marker);
+
+        this.selectedCustomOverlay.setContent(this._getOverlayContent(place, marker));
+        this.selectedCustomOverlay.setPosition(marker.getPosition());
+        this.selectedCustomOverlay.setMap(this.map);
+
         // TODO : notify click event to store
         this.notifyAgencyClicked(place);
         this.selectedMarker = marker;
@@ -157,6 +158,54 @@ class KakaoMap {
     place.marker = marker;
     this.places.set(place.id, place);
   };
+
+  _getOverlayContent(place) {
+    const closeOverlay = () => {
+      this.selectedCustomOverlay.setMap(null);
+      if (this.selectedMarker) {
+        this.selectedMarker.setImage(this.normalImage);
+        this.selectedMarker = null;
+      }
+    };
+    const wrapCSS = `
+      padding: 5px;
+      
+      border-radius: 10px;
+      border: 2px solid #AFB42B;
+      background-color: white;
+      
+      margin-bottom : 150px;
+      width: 160px;
+    `;
+    const titleContainerCSS = `
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    `;
+    const titleCSS = `
+      font-size:12px; 
+      font-weight: bold;
+    `;
+    const content = document.createElement("div");
+    content.innerHTML =
+      `<div style="${wrapCSS}">` +
+      `  <div style="${titleContainerCSS}">` +
+      `    <div style="${titleCSS}">` +
+      `      ${place.place_name}` +
+      `    </div>` +
+      `    <div class="close" onclick="${closeOverlay()}">` +
+      `      <i class="fa-solid fa-xmark"></i>` +
+      `    </div>` +
+      `  </div>` +
+      `</div>`;
+    content.addEventListener("click", (e) => {
+      e.preventDefault();
+      closeOverlay();
+    });
+
+    return content;
+  }
 
   setOnClickAgencyListener(listener) {
     this.onClickAgency = listener;
