@@ -117,7 +117,7 @@ export default {
       outlined: false,
       rounded: true,
       small: true,
-      class: "mr-2",
+      class: "mr-2 white--text",
     },
     buttonUnliked: {
       color: "deep-orange",
