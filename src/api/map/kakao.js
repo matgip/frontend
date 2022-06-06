@@ -145,7 +145,7 @@ class KakaoMap {
         marker.setImage(this.selectedImage);
         mouseoverInfowindow.close();
 
-        this.selectedCustomOverlay.setContent(this._getOverlayContent(place, marker));
+        this.selectedCustomOverlay.setContent(this._getOverlayContent(place));
         this.selectedCustomOverlay.setPosition(marker.getPosition());
         this.selectedCustomOverlay.setMap(this.map);
 
@@ -160,6 +160,7 @@ class KakaoMap {
   };
 
   _getOverlayContent(place) {
+    console.log(place);
     const closeOverlay = () => {
       this.selectedCustomOverlay.setMap(null);
       if (this.selectedMarker) {
@@ -168,14 +169,13 @@ class KakaoMap {
       }
     };
     const wrapCSS = `
-      padding: 5px;
+      padding: 10px;
       
       border-radius: 10px;
       border: 2px solid #AFB42B;
       background-color: white;
       
       margin-bottom : 150px;
-      width: 160px;
     `;
     const titleContainerCSS = `
       display: flex;
@@ -186,12 +186,14 @@ class KakaoMap {
     const titleCSS = `
       font-size:12px; 
       font-weight: bold;
+
+      margin-right: 10px;
     `;
     const content = document.createElement("div");
     content.innerHTML =
       `<div style="${wrapCSS}">` +
       `  <div style="${titleContainerCSS}">` +
-      `    <div style="${titleCSS}">` +
+      `    <div id="title" style="${titleCSS}">` +
       `      ${place.place_name}` +
       `    </div>` +
       `    <div class="close" onclick="${closeOverlay()}">` +
