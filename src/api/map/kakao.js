@@ -74,9 +74,12 @@ class KakaoMap {
         this._cacheLatLng(y, x);
         // this.placeSearch.categorySearch("AG2", this._callback, { x: x, y: y, radius: 300 }); // redius 710 will cover all boundary
         const places = await agencyApi.searchByCenter(x, y);
-        for (let p of places) {
-          this.addMarker(p);
-        }
+        // for (let p of places) {
+        //   this.addMarker(p);
+        // }
+        places.forEach((place) => {
+          setImmediate(this.addMarker(place));
+        });
       }
     }
   };
@@ -146,7 +149,7 @@ class KakaoMap {
         !!this.selectedMarker && this.selectedMarker.setImage(this.normalImage);
         marker.setImage(this.selectedImage);
         mouseoverInfowindow.close();
-        console.log("TEST");
+
         this.selectedCustomOverlay.setContent(this._getOverlayContent(place));
         this.selectedCustomOverlay.setPosition(marker.getPosition());
         this.selectedCustomOverlay.setMap(this.map);
@@ -170,7 +173,7 @@ class KakaoMap {
       }
     };
     const toggleRoadView = () => {
-      console.log("TT");
+      console.log("TODO");
     };
     const cancelIcon = "fa-solid fa-xmark fa-lg";
     const wrapCSS = `
