@@ -36,6 +36,8 @@ class KakaoMap {
     };
 
     this.map = new kakao.maps.Map(container, options);
+    // this.roadview = new kakao.maps.Roadview(container);
+    // this.roadviewClient = new kakao.maps.RoadviewClient();
 
     this.placeSearch = new kakao.maps.services.Places(this.map);
     this.markerCluster = new kakao.maps.MarkerClusterer({
@@ -160,7 +162,6 @@ class KakaoMap {
   };
 
   _getOverlayContent(place) {
-    console.log(place);
     const closeOverlay = () => {
       this.selectedCustomOverlay.setMap(null);
       if (this.selectedMarker) {
@@ -168,6 +169,10 @@ class KakaoMap {
         this.selectedMarker = null;
       }
     };
+    const toggleRoadView = () => {
+      console.log("TT");
+    };
+    const cancelIcon = "fa-solid fa-xmark";
     const wrapCSS = `
       padding: 10px;
       
@@ -182,12 +187,21 @@ class KakaoMap {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+
+      border-bottom: 1px solid #e0e0e0;
     `;
     const titleCSS = `
       font-size:12px; 
       font-weight: bold;
 
       margin-right: 10px;
+    `;
+    const roadContainerCSS = `
+      font-size: 10px;
+      margin-top: 10px;
+    `;
+    const roadViewButtonCSS = `
+      color: blue;
     `;
     const content = document.createElement("div");
     content.innerHTML =
@@ -196,14 +210,20 @@ class KakaoMap {
       `    <div id="title" style="${titleCSS}">` +
       `      ${place.place_name}` +
       `    </div>` +
-      `    <div class="close" onclick="${closeOverlay()}">` +
-      `      <i class="fa-solid fa-xmark"></i>` +
-      `    </div>` +
+      `    <i class="${cancelIcon}" ></i>` +
+      `  </div>` +
+      `  <div style="${roadContainerCSS}">` +
+      `    <p>${place.road_address_name}</p>` +
+      `    <button class="roadview" style="${roadViewButtonCSS}">로드뷰</button>` +
       `  </div>` +
       `</div>`;
     content.addEventListener("click", (e) => {
       e.preventDefault();
-      closeOverlay();
+      if (e.target.className === cancelIcon) {
+        closeOverlay();
+      } else if (e.target.className === "roadview") {
+        toggleRoadView();
+      }
     });
 
     return content;
