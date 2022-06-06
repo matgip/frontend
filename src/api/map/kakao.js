@@ -180,7 +180,7 @@ class KakaoMap {
       border: 2px solid #AFB42B;
       background-color: white;
       
-      margin-bottom : 150px;
+      margin-bottom : 190px;
     `;
     const titleContainerCSS = `
       display: flex;
@@ -188,16 +188,16 @@ class KakaoMap {
       justify-content: space-between;
       align-items: center;
 
+      font-size: 16px;
+      font-weight: bold;
+
       border-bottom: 1px solid #e0e0e0;
     `;
     const titleCSS = `
-      font-size:12px; 
-      font-weight: bold;
-
       margin-right: 10px;
     `;
     const roadContainerCSS = `
-      font-size: 10px;
+      font-size: 14px;
       margin-top: 10px;
     `;
     const roadViewButtonCSS = `
