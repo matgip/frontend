@@ -201,6 +201,7 @@ class KakaoMap {
     `;
     const roadViewButtonCSS = `
       color: blue;
+      padding-top: 2px;
     `;
     const content = document.createElement("div");
     content.innerHTML =
