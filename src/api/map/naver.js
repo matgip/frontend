@@ -43,6 +43,7 @@ class NaverMap {
       anchorSkew: true,
     });
 
+    naver.maps.Event.addListener(this.map, "drag", this.scan);
     // 최초 Load시 스캔
     this.scan();
   };
