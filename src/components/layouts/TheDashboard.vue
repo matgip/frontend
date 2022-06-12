@@ -87,10 +87,6 @@ export default {
     return {
       mapCenter: {},
 
-      // Touch move
-      startY: 0,
-      endY: 0,
-
       isScrollUp: false,
       isMenuVisible: false,
 

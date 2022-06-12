@@ -184,9 +184,9 @@ export default {
     },
 
     async updateAgencies() {
-      const { y, x } = this.center;
-      this.agencies = await agencyApi.searchByCenter(x, y);
-      this.sorted = mergesort(this.comparator, await agencyApi.searchByCenter(x, y));
+      const { lat, lng } = this.center;
+      this.agencies = await agencyApi.searchByCenter(lng, lat);
+      this.sorted = mergesort(this.comparator, await agencyApi.searchByCenter(lng, lat));
     },
 
     $_orderByLikes(a, b) {

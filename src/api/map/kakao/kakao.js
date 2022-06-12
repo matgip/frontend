@@ -6,7 +6,7 @@ const SCAN_MIN_LEVEL = 4;
 const CLUSTER_MIN_LEVEL = 6;
 const SCANNED = 1;
 
-import agencyApi from "../agency";
+import agencyApi from "../../agency";
 
 class KakaoMap {
   places = new Map();
@@ -39,7 +39,6 @@ class KakaoMap {
     // this.roadview = new kakao.maps.Roadview(container);
     // this.roadviewClient = new kakao.maps.RoadviewClient();
 
-    // this.placeSearch = new kakao.maps.services.Places(this.map);
     this.markerCluster = new kakao.maps.MarkerClusterer({
       map: this.map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
       averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
@@ -72,11 +71,8 @@ class KakaoMap {
         const y = (lat + i / 100).toFixed(2);
         if (this._isScanned(y, x)) continue;
         this._cacheLatLng(y, x);
-        // this.placeSearch.categorySearch("AG2", this._callback, { x: x, y: y, radius: 300 }); // redius 710 will cover all boundary
+
         const places = await agencyApi.searchByCenter(x, y);
-        // for (let p of places) {
-        //   this.addMarker(p);
-        // }
         places.forEach((place) => {
           setImmediate(this.addMarker(place));
         });
