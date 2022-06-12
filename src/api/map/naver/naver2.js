@@ -11,7 +11,6 @@ module.exports = class NaverMapApi extends MapApi {
   selectedIcon = null;
   selectedMarker = null; // 클릭한 마커를 담을 변수
   infoWindow = null;
-  cbScanMap = null;
 
   /**
    * @override
@@ -51,13 +50,6 @@ module.exports = class NaverMapApi extends MapApi {
     // 최초 Load시 스캔
     this.cbScanMap();
   };
-
-  /**
-   * @override
-   */
-  setOnLoadMapListener(cbScanMap) {
-    this.cbScanMap = cbScanMap;
-  }
 
   /**
    * @override
@@ -124,6 +116,14 @@ module.exports = class NaverMapApi extends MapApi {
     this.map.setZoom(this.map.getZoom() - 1);
   };
 
+  /**
+   * @override
+   */
+  isScanMinLevel() {
+    const lvl = this.map.getZoom();
+    return lvl >= SCAN_MIN_LEVEL ? true : false;
+  }
+
   _getContent(place) {
     const closeOverlay = () => {
       this.infoWindow.close();
@@ -174,13 +174,5 @@ module.exports = class NaverMapApi extends MapApi {
     });
 
     return content;
-  }
-
-  /**
-   * @override
-   */
-  isScanMinLevel() {
-    const lvl = this.map.getZoom();
-    return lvl >= SCAN_MIN_LEVEL ? true : false;
   }
 };

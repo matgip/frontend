@@ -1,5 +1,6 @@
 module.exports = class MapApi {
   onClickAgency = null;
+  cbScanMap = null;
   /**
    * 맵을 vue 파일에 마운트 시, 호출되는 메소드입니다.
    */
@@ -12,7 +13,7 @@ module.exports = class MapApi {
    * @param {*} cbScanMap Vue component에 로드 될 때 호출 될 콜백함수
    */
   setOnLoadMapListener(cbScanMap) {
-    throw new Error("ERR_METHOD_NOT_IMPLEMENTED");
+    this.cbScanMap = cbScanMap;
   }
 
   /**

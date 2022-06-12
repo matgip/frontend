@@ -1,3 +1,7 @@
+const selectedMarkerImage = require("@/assets/images/marker_selected.png");
+const normalMarkerImage = require("@/assets/images/marker.png");
+const imgSize = { width: 40, height: 45 };
+
 const SCAN_MIN_LEVEL = 4;
 const CLUSTER_MIN_LEVEL = 6;
 
@@ -49,8 +53,160 @@ module.exports = class KakaoMapApi extends MapApi {
       new kakao.maps.Size(imgSize.width, imgSize.height)
     );
 
-    kakao.maps.event.addListener(this.map, "idle", this.scan);
+    kakao.maps.event.addListener(this.map, "idle", this.cbScanMap);
     // 최초 Load시 스캔
-    this.scan();
+    this.cbScanMap();
   };
+
+  /**
+   * @override
+   */
+  addMarker = (place) => {
+    if (this.places.has(place.id)) {
+      return;
+    }
+    const marker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(place.y, place.x),
+      image: this.normalImage,
+      clickable: true,
+    });
+    this.markerCluster.addMarker(marker);
+
+    const mouseoverContent = '<div style="padding:2px;">' + place.place_name + "</div>";
+    const mouseoverInfowindow = new kakao.maps.InfoWindow({ content: mouseoverContent });
+
+    kakao.maps.event.addListener(marker, "mouseover", () => {
+      if (!this.selectedMarker || this.selectedMarker !== marker) {
+        mouseoverInfowindow.open(this.map, marker);
+      }
+    });
+    kakao.maps.event.addListener(marker, "mouseout", () => {
+      mouseoverInfowindow.close();
+    });
+    kakao.maps.event.addListener(marker, "click", () => {
+      if (!this.selectedMarker || this.selectedMarker !== marker) {
+        !!this.selectedMarker && this.selectedMarker.setImage(this.normalImage);
+        marker.setImage(this.selectedImage);
+        mouseoverInfowindow.close();
+
+        this.selectedCustomOverlay.setContent(this._getOverlayContent(place));
+        this.selectedCustomOverlay.setPosition(marker.getPosition());
+        this.selectedCustomOverlay.setMap(this.map);
+
+        // TODO : notify click event to store
+        this.notifyAgencyClicked(place);
+        this.selectedMarker = marker;
+      }
+    });
+
+    place.marker = marker;
+    this.places.set(place.id, place);
+  };
+
+  /**
+   * @override
+   */
+  getCenter() {
+    const latlng = this.map.getCenter();
+    return { lat: latlng.getLat(), lng: latlng.getLng() };
+  }
+
+  /**
+   * @override
+   */
+  PinPlace(place) {
+    this.addMarker(place);
+    const placeCached = this.places.get(place.id);
+    this.map.panTo(new kakao.maps.LatLng(placeCached.y, placeCached.x));
+    kakao.maps.event.trigger(placeCached.marker, "click");
+  }
+
+  /**
+   * @override
+   */
+  zoomIn = () => {
+    this.map.setLevel(this.map.getLevel() - 1);
+  };
+
+  /**
+   * @override
+   */
+  zoomOut = () => {
+    this.map.setLevel(this.map.getLevel() + 1);
+  };
+
+  /**
+   * @override
+   */
+  isScanMinLevel() {
+    const lvl = this.map.getLevel();
+    return lvl <= SCAN_MIN_LEVEL ? true : false;
+  }
+
+  _getOverlayContent(place) {
+    const closeOverlay = () => {
+      this.selectedCustomOverlay.setMap(null);
+      if (this.selectedMarker) {
+        this.selectedMarker.setImage(this.normalImage);
+        this.selectedMarker = null;
+      }
+    };
+    const toggleRoadView = () => {
+      console.log("TODO");
+    };
+    const cancelIcon = "fa-solid fa-xmark fa-lg";
+    const wrapCSS = `
+      padding: 10px;
+      
+      border-radius: 10px;
+      border: 2px solid #AFB42B;
+      background-color: white;
+    `;
+    const titleContainerCSS = `
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      font-size: 16px;
+      font-weight: bold;
+
+      border-bottom: 1px solid #e0e0e0;
+    `;
+    const titleCSS = `
+      margin-right: 10px;
+    `;
+    const roadContainerCSS = `
+      font-size: 14px;
+      margin-top: 10px;
+    `;
+    const roadViewButtonCSS = `
+      color: blue;
+      padding-top: 2px;
+    `;
+    const content = document.createElement("div");
+    content.innerHTML =
+      `<div style="${wrapCSS}">` +
+      `  <div style="${titleContainerCSS}">` +
+      `    <div id="title" style="${titleCSS}">` +
+      `      ${place.place_name}` +
+      `    </div>` +
+      `    <i class="${cancelIcon}"></i>` +
+      `  </div>` +
+      `  <div style="${roadContainerCSS}">` +
+      `    <p>${place.road_address_name}</p>` +
+      `    <button class="roadview" style="${roadViewButtonCSS}">로드뷰</button>` +
+      `  </div>` +
+      `</div>`;
+    content.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (e.target.className === cancelIcon) {
+        closeOverlay();
+      } else if (e.target.className === "roadview") {
+        toggleRoadView();
+      }
+    });
+
+    return content;
+  }
 };

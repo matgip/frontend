@@ -1,6 +1,7 @@
 const SCANNED = 1;
 
 import agencyApi from "../agency";
+import kakaoMapApi from "./kakao/kakao2";
 import naverMapApi from "./naver/naver2";
 
 class MapController {
@@ -119,6 +120,8 @@ class MapController {
     switch (corpName) {
       case "naver":
         return new naverMapApi();
+      case "kakao":
+        return new kakaoMapApi();
     }
   }
 }
