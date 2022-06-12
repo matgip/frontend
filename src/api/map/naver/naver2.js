@@ -128,6 +128,10 @@ module.exports = class NaverMapApi extends MapApi {
   _getContent(place) {
     const closeOverlay = () => {
       this.infoWindow.close();
+      if (this.selectedMarker) {
+        this.selectedMarker.setIcon(this.normalIcon);
+        this.selectedMarker = null;
+      }
     };
     const content = document.createElement("div");
     content.innerHTML =
