@@ -1,4 +1,5 @@
-const SCAN_MIN_LEVEL = 18;
+const INIT_ZOOM_LEVEL = 18;
+const SCAN_MIN_LEVEL = 14;
 const NORMAL_MARKER_IMAGE_URL = "http://119.207.128.97/api/upload/image?marker=marker.png";
 const SELECTED_MARKER_IMAGE_URL = "http://119.207.128.97/api/upload/image?marker=marker_selected.png";
 
@@ -28,7 +29,7 @@ module.exports = class NaverMapApi extends MapApi {
     const container = document.getElementById("mapview");
     const options = {
       center: new naver.maps.LatLng(37.2579324408187, 127.059981890576),
-      zoom: SCAN_MIN_LEVEL,
+      zoom: INIT_ZOOM_LEVEL,
     };
     this.map = new naver.maps.Map(container, options);
 
