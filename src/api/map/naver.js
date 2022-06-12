@@ -86,7 +86,6 @@ class NaverMap {
         marker.setIcon(this.selectedIcon);
 
         this.infoWindow.setContent(this._getContent(place));
-        // this.infoWindow.setPosition(marker.getPosition());
         this.infoWindow.open(this.map, marker);
 
         this.notifyAgencyClicked(place);
