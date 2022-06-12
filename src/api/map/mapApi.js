@@ -1,6 +1,33 @@
 module.exports = class MapApi {
   onClickAgency = null;
   cbScanMap = null;
+
+  constructor() {
+    this.iwCancelIcon = "fa-solid fa-xmark fa-lg";
+    this.iwWrapCSS = `
+      padding: 10px;
+  
+      background-color: white;
+    `;
+    this.iwTitleContainerCSS = `
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      font-size: 16px;
+      font-weight: bold;
+
+      border-bottom: 1px solid #e0e0e0;
+    `;
+    this.iwTitleCSS = `
+      margin-right: 10px;
+    `;
+    this.iwAddressCSS = `
+      font-size: 14px;
+      margin-top: 10px;
+    `;
+  }
   /**
    * 맵을 vue 파일에 마운트 시, 호출되는 메소드입니다.
    */

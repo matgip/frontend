@@ -128,47 +128,22 @@ module.exports = class NaverMapApi extends MapApi {
     const closeOverlay = () => {
       this.infoWindow.close();
     };
-    const cancelIcon = "fa-solid fa-xmark fa-lg";
-    const wrapCSS = `
-      padding: 10px;
-    
-      background-color: white;
-    `;
-    const titleContainerCSS = `
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-
-      font-size: 16px;
-      font-weight: bold;
-
-      border-bottom: 1px solid #e0e0e0;
-    `;
-    const titleCSS = `
-      margin-right: 10px;
-    `;
-    const roadContainerCSS = `
-      font-size: 14px;
-      margin-top: 10px;
-    `;
-
     const content = document.createElement("div");
     content.innerHTML =
-      `<div style="${wrapCSS}">` +
-      `  <div style="${titleContainerCSS}">` +
-      `    <div id="title" style="${titleCSS}">` +
+      `<div style="${this.iwWrapCSS}">` +
+      `  <div style="${this.iwTitleContainerCSS}">` +
+      `    <div id="title" style="${this.iwTitleCSS}">` +
       `      ${place.place_name}` +
       `    </div>` +
-      `    <i class="${cancelIcon}"></i>` +
+      `    <i class="${this.iwCancelIcon}"></i>` +
       `  </div>` +
-      `  <div style="${roadContainerCSS}">` +
+      `  <div style="${this.iwAddressCSS}">` +
       `    <p>${place.road_address_name}</p>` +
       `  </div>` +
       `</div>`;
     content.addEventListener("click", (e) => {
       e.preventDefault();
-      if (e.target.className === cancelIcon) {
+      if (e.target.className === this.iwCancelIcon) {
         closeOverlay();
       }
     });
