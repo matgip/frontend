@@ -11,14 +11,17 @@
 </template>
 
 <script>
-import kakaoMap from "@/api/map/kakao";
+// import kakaoMap from "@/api/map/kakao";
+import naverMap from "@/api/map/naver";
 import { mapGetters } from "vuex";
 
 export default {
   mounted() {
-    this.map = kakaoMap.mount();
-    kakaoMap.setOnClickAgencyListener(this.onClickAgency);
+    // this.map = kakaoMap.mount();
+    // kakaoMap.setOnClickAgencyListener(this.onClickAgency);
 
+    this.map = naverMap.mount();
+    naverMap.setOnClickAgencyListener(this.onClickAgency);
     this.$store.commit("UPDATE_MAP", this.map);
   },
 

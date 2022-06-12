@@ -39,7 +39,8 @@
 <script>
 import { mapGetters } from "vuex";
 
-import kakaoMap from "@/api/map/kakao";
+// import kakaoMap from "@/api/map/kakao";
+import naverMap from "@/api/map/naver";
 import agencyApi from "@/api/agency";
 
 export default {
@@ -96,7 +97,8 @@ export default {
   watch: {
     async select(estate) {
       if (!estate) return;
-      kakaoMap.PinPlace(estate);
+      // kakaoMap.PinPlace(estate);
+      naverMap.PinPlace(estate);
     },
 
     async search(keyword) {

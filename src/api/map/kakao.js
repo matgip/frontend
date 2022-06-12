@@ -21,7 +21,7 @@ class KakaoMap {
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src = `${process.env.VUE_APP_MAP_LIB_URL}?autoload=false&appkey=${process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY}&libraries=services,clusterer,drawing`;
+      script.src = `${process.env.VUE_APP_KAKAO_MAP_URL}?autoload=false&appkey=${process.env.VUE_APP_KAKAO_JAVASCRIPT_KEY}&libraries=services,clusterer,drawing`;
       document.head.appendChild(script);
     }
 
@@ -39,7 +39,7 @@ class KakaoMap {
     // this.roadview = new kakao.maps.Roadview(container);
     // this.roadviewClient = new kakao.maps.RoadviewClient();
 
-    this.placeSearch = new kakao.maps.services.Places(this.map);
+    // this.placeSearch = new kakao.maps.services.Places(this.map);
     this.markerCluster = new kakao.maps.MarkerClusterer({
       map: this.map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
       averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
@@ -182,7 +182,6 @@ class KakaoMap {
       border-radius: 10px;
       border: 2px solid #AFB42B;
       background-color: white;
-
     `;
     const titleContainerCSS = `
       display: flex;
