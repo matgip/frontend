@@ -1,6 +1,6 @@
 const SCAN_MIN_LEVEL = 18;
-const NORMAL_MARKER_IMAGE_URL = "http://localhost:8080/api/upload/image?marker=marker.png";
-const SELECTED_MARKER_IMAGE_URL = "http://localhost:8080/api/upload/image?marker=marker_selected.png";
+const NORMAL_MARKER_IMAGE_URL = "http://119.207.128.97/api/upload/image?marker=marker.png";
+const SELECTED_MARKER_IMAGE_URL = "http://119.207.128.97/api/upload/image?marker=marker_selected.png";
 
 const MapApi = require("../mapApi");
 
