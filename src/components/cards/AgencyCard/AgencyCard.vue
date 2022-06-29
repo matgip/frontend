@@ -19,7 +19,9 @@
         <p>
           <v-row v-bind="vuetifyRow">
             <v-rating v-bind="vuetifyStar" :value="agency.stars"></v-rating>
-            <div v-bind="vuetifyStarText">{{ agency.stars }} ({{ agency.likes }} 좋아요)</div>
+            <div v-bind="vuetifyStarText">
+              {{ agency.stars }} ({{ agency.likes }} 좋아요)
+            </div>
           </v-row>
         </p>
       </div>
@@ -29,10 +31,12 @@
           <v-icon v-bind="vuetifyIcon">{{ fontAwesomeEyes }}</v-icon> {{ views }} 명이 조회함
         </p> -->
         <p>
-          <v-icon v-bind="vuetifyIcon">{{ fontAwesomeMarker }}</v-icon> {{ agency.address_name }}
+          <v-icon v-bind="vuetifyIcon">{{ fontAwesomeMarker }}</v-icon>
+          {{ agency.address_name }}
         </p>
         <p>
-          <v-icon v-bind="vuetifyIcon">{{ fontAwesomeBook }}</v-icon> {{ agency.phone }}
+          <v-icon v-bind="vuetifyIcon">{{ fontAwesomeBook }}</v-icon>
+          {{ agency.phone }}
         </p>
       </div>
 
@@ -41,7 +45,9 @@
       <!-- 부동산 리뷰 확인 버튼 -->
       <div class="agency_review_button_container">
         <p>
-          <v-btn v-bind="vuetifyReviewButton" @click="launchReviewCard()"> {{ agency.reviewCnt }} 명의 리뷰 </v-btn>
+          <v-btn v-bind="vuetifyReviewButton" @click="launchReviewCard()">
+            {{ agency.reviewCnt }} 명의 리뷰
+          </v-btn>
         </p>
       </div>
     </span>

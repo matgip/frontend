@@ -1,7 +1,9 @@
 const INIT_ZOOM_LEVEL = 18;
 const SCAN_MIN_LEVEL = 14;
-const NORMAL_MARKER_IMAGE_URL = "http://119.207.128.97/api/upload/image?marker=marker.png";
-const SELECTED_MARKER_IMAGE_URL = "http://119.207.128.97/api/upload/image?marker=marker_selected.png";
+const NORMAL_MARKER_IMAGE_URL =
+  "http://119.207.128.97/api/upload/image?marker=marker.png";
+const SELECTED_MARKER_IMAGE_URL =
+  "http://119.207.128.97/api/upload/image?marker=marker_selected.png";
 
 const MapApi = require("../mapApi");
 
@@ -143,7 +145,7 @@ module.exports = class NaverMapApi extends MapApi {
       `    <i class="${this.iwCancelIcon}"></i>` +
       `  </div>` +
       `  <div style="${this.iwAddressCSS}">` +
-      `    <p>${place.road_address_name}</p>` +
+      `    <p>${place.address_name}</p>` +
       `  </div>` +
       `</div>`;
     content.addEventListener("click", (e) => {

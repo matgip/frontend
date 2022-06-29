@@ -48,7 +48,10 @@ class KakaoMap {
     // selectedCustomOverlay 는 오직 1개만 존재해야 되므로 this에 등록
     this.selectedCustomOverlay = new kakao.maps.CustomOverlay({ yAnchor: 1.5 });
 
-    this.normalImage = new kakao.maps.MarkerImage(normalMarkerImage, new kakao.maps.Size(30, 35));
+    this.normalImage = new kakao.maps.MarkerImage(
+      normalMarkerImage,
+      new kakao.maps.Size(30, 35)
+    );
     this.selectedImage = new kakao.maps.MarkerImage(
       selectedMarkerImage,
       new kakao.maps.Size(imgSize.width, imgSize.height)
@@ -129,8 +132,11 @@ class KakaoMap {
     });
     this.markerCluster.addMarker(marker);
 
-    const mouseoverContent = '<div style="padding:2px;">' + place.place_name + "</div>";
-    const mouseoverInfowindow = new kakao.maps.InfoWindow({ content: mouseoverContent });
+    const mouseoverContent =
+      '<div style="padding:2px;">' + place.place_name + "</div>";
+    const mouseoverInfowindow = new kakao.maps.InfoWindow({
+      content: mouseoverContent,
+    });
 
     kakao.maps.event.addListener(marker, "mouseover", () => {
       if (!this.selectedMarker || this.selectedMarker !== marker) {
@@ -211,7 +217,7 @@ class KakaoMap {
       `    <i class="${cancelIcon}"></i>` +
       `  </div>` +
       `  <div style="${roadContainerCSS}">` +
-      `    <p>${place.road_address_name}</p>` +
+      `    <p>${place.address_name}</p>` +
       `    <button class="roadview" style="${roadViewButtonCSS}">로드뷰</button>` +
       `  </div>` +
       `</div>`;
